@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\Courses\CourseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,4 +22,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('registration', [RegisterController::class, 'registration']);
+
 Route::get('login', [LoginController::class, 'login']);
+
+Route::get('courses', [CourseController::class, 'getCourses']);
+
+Route::get('courses/{id}', [CourseController::class, 'getCourseById']);
