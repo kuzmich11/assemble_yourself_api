@@ -11,14 +11,21 @@ class RegisterController extends Controller
 {
     public function registration (Request $request) {
 
-        if (User::where('email', '=', $request->get('email'))->first() === null) {
+        $name = $request->get('name');
+        $email = $request->get('email');
+        $password =  $request->get('password');
+
+        if (!isset($name) or !isset($email) or !isset($password)) {
+            return response(['error' => true, 'message' => 'Не удалось зарегистрировать пользователя'], 400);
+        }
+        if (User::where('email', '=', $email)->first() === null) {
             $user = User::create([
-                'name' => $request->get('name'),
-                'email' => $request->get('email'),
-                'password' => Hash::make($request->get('password')),
+                'name' => $name,
+                'email' => $email,
+                'password' => Hash::make($password),
             ]);
             if ($user->save()) {
-                return response(['message' => 'Пользователь успешно создан'], 201);
+                return response(['message' => 'Пользователь успешно зарегистрирован'], 201);
             }
             return response(['error' => true, 'message' => 'Не удалось зарегистрировать пользователя'], 400);
         }
