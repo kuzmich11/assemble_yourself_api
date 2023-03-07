@@ -12,6 +12,7 @@ class LoginController extends Controller
         if (!$token = auth()->attempt($creds)) {
             return response()->json(['error' => true, 'message' => 'Не верный email или password'], 401);
         }
+        setcookie('token', $token, time()+60);
         return response()->json(['token' => $token], 200);
     }
 }
