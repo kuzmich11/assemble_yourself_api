@@ -10,7 +10,7 @@ class LoginController extends Controller
     public function login (Request $request) {
         $creds = $request->only('email', 'password');
         if (!$token = auth()->attempt($creds)) {
-            return response()->json(['error' => true, 'message' => 'Incorrect Login/Password'], 401);
+            return response()->json(['error' => true, 'message' => 'Не верный email или password'], 401);
         }
         return response()->json(['token' => $token], 200);
     }
