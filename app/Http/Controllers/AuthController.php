@@ -3,62 +3,111 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
-use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
     {
-        return User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-        ]);
+        $this->middleware('auth:api', ['except' => ['login', 'refresh', 'register']]);
     }
 
-    public function login(Request $request)
-    {
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response([
-                'message' => 'Пользователя с такими учетными данными не существует',
+    public function register (Request $request) {
 
-            ], Response::HTTP_UNAUTHORIZED);
+        $name = $request->get('name');
+        $email = $request->get('email');
+        $password =  $request->get('password');
+
+        if (!isset($name) or !isset($email) or !isset($password)) {
+            return response(['error' => true, 'message' => 'Не удалось зарегистрировать пользователя'], 400);
+        }
+        if (User::where('email', '=', $email)->first() === null) {
+            $user = User::create([
+                'name' => $name,
+                'email' => $email,
+                'password' => Hash::make($password),
+            ]);
+            if ($user->save()) {
+//                return response(['message' => 'Пользователь успешно зарегистрирован'], 201);
+                return $this->login();
+            }
+            return response(['error' => true, 'message' => 'Не удалось зарегистрировать пользователя'], 400);
         }
 
-        $user = Auth::user();
-
-        $token = $user->createToken('token')->plainTextToken;
-
-        $cookie = cookie('jwt', $token, 60*24);
-
-        return response([
-            'messages' => 'success',
-
-        ])->withCookie($cookie);
+        return response(['error' => true, 'message' => 'Пользователь с данным email уже существует'], 400);
     }
 
-    public function user()
+    /**
+     * Get a JWT via given credentials.
+     *
+     * @return JsonResponse
+     */
+    public function login()
     {
-//        if (!Auth::user()){
-//            return response([
-//                'message' => 'Пользователь не авторизован',
-//
-//            ], Response::HTTP_UNAUTHORIZED);
-//        }
+        $credentials = request(['email', 'password']);
 
-        return Auth::user();
+        if (! $token = auth()->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        return $this->respondWithToken($token);
     }
 
+    /**
+     * Get the authenticated User.
+     *
+     * @return JsonResponse
+     */
+    public function me()
+    {
+        return response()->json(auth()->user());
+    }
+
+    /**
+     * Log the user out (Invalidate the token).
+     *
+     * @return JsonResponse
+     */
     public function logout()
     {
-        $cookie  = Cookie::forget('jwt');
-        return response([
-            'messages' => 'success',
+        auth()->logout();
 
-        ])->withCookie($cookie);
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    /**
+     * Refresh a token.
+     *
+     * @return JsonResponse
+     */
+    public function refresh()
+    {
+
+        return $this->respondWithToken(auth()->refresh());
+    }
+
+    /**
+     * Get the token array structure.
+     *
+     * @param string $token
+     *
+     * @return JsonResponse
+     */
+    protected function respondWithToken(string $token)
+    {
+        $cookie = cookie('token', $token);
+//            json([
+//            'access_token' => $token,
+//            'token_type' => 'bearer',
+//            'expires_in' => auth()->factory()->getTTL() * 60
+//        ]));
+        return response(['message' => 'Success'])->withCookie($cookie);
     }
 }
