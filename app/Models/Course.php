@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Sanctum\HasApiTokens;
@@ -20,13 +21,18 @@ class Course extends Model
      */
     protected $fillable = [
         'course_name',
+        'description',
+        'tag',
+        'cover_url',
         'author',
-        'price',
+        'start_date',
+        'end_date',
+        'course_program',
     ];
 
-    public function courses():BelongsToMany
+    public function user():BelongsTo
     {
-        return $this->belongsToMany(User::class, 'courses_has_users', 'course_id', 'user_id', 'id', 'id');
+        return $this->belongsTo(User::class, 'author');
     }
 
     // /**

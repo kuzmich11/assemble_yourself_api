@@ -16,8 +16,13 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->string('course_name');
-            $table->string('author');
-            $table->float('price');
+            $table->string('description');
+            $table->string('tag')->nullable();
+            $table->string('cover_url');
+            $table->foreignId('author')->references('id')->on('users')->cascadeOnDelete();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->json('course_program');
             $table->timestamps();
         });
     }

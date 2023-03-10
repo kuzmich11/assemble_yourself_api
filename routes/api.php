@@ -26,6 +26,8 @@ Route::group(['middleware' => 'api'], function () {
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('me', [AuthController::class, 'me']);
 
+    Route::post('courses', [CourseController::class, 'createCourse']);
+
     Route::group(['middleware' => 'auth:api'], function () {
 
     });
