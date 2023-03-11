@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Courses;
 
 use App\Http\Controllers\Controller;
-use App\Models\Course;
+use App\Models\CourseModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -11,25 +11,25 @@ class CourseController extends Controller
 {
     public function getCourses()
     {
-        $courses = Course::get();
+        $courses = CourseModel::get();
         foreach ($courses as $course) {
             $author = User::where('id', '=',  $course['author'])->get()->first();
             $course['author'] = $author['name'];
         }
 
-        return response()->json($courses, 200);
+        return response()->json($courses);
     }
 
     public function getCourseById(int $id)
     {
-        $course = Course::where('id', '=', $id)->first();
+        $course = CourseModel::where('id', '=', $id)->first();
         $author = User::where('id', '=',  $course['author'])->get()->first();
         $course['author'] = $author['name'];
 
         if (!isset($course)) {
             return response(['message' => 'Такого курса не существует'], 404);
         }
-        return response()->json($course, 200);
+        return response()->json($course);
     }
 
     public function createCourse(Request $request)
@@ -41,7 +41,7 @@ class CourseController extends Controller
             $description = $request->get('description');
             $tag = $request->get('tag');
             $cover_url = $request->get('cover_url');
-            $author = $user->getKey('id');
+            $author = $user->getKey();
             $start_date = $request->get('start_date');
             $end_date = $request->get('end_date');
             $course_program = json_encode($request->get('course_program'));
@@ -49,7 +49,7 @@ class CourseController extends Controller
             if (!isset($course_name) or !isset($description) or !isset($cover_url) or !isset($author) or !isset($course_program)) {
                 return response(['message' => 'Заполнены не все обязательные поля'], 400);
             }
-            $course = Course::create([
+            $course = CourseModel::create([
                 'course_name' => $course_name,
                 'description' => $description,
                 'tag' => $tag,

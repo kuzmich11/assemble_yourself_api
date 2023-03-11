@@ -1,4 +1,4 @@
-# Авторизация и аутентификация
+# 1. Авторизация и аутентификация
 
 _Во всех запросах должен присутствовать header_
 
@@ -274,9 +274,9 @@ _Во всех запросах должен присутствовать header
 - Код ответа: 401
 
 
-# Курсы
+# 2. Курсы
 
-## Список всех курсов
+## Получение списка всех курсов
 
 ### Точка Входа
 
@@ -364,6 +364,188 @@ _Во всех запросах должен присутствовать header
 
 - Код ответа: 404
 
-В случае если база не доступна
 
-- Код ответа: 500
+## Создание курса
+
+### Точка Входа
+
+- Точка входа для регистрации: **/api/courses/{id}**
+
+### Запрос
+
+- Метод: **POST**
+
+- Схема:
+
+{
+
+"course_name": "php",
+
+"description": "Краткое описание курса",
+
+"tag": "php",
+
+"cover_url": "http://vandervort.biz/adipisci-ut-doloremque-non-asperiores-rerum-eos",
+
+"start_date": "2023-12-09",
+
+"end_date": "2023-12-09",
+
+"course program": [
+
+    {"heading": "php"},
+
+    {"description": "Краткое описание курса"}
+
+]
+
+}
+
+### Ответ
+
+#### Успех
+
+- Схема:
+
+  {
+
+  "message": "Success"
+
+  }
+
+- Код ответа: 200
+
+#### Неудача
+
+В случае если пользователь не авторизован
+
+- Схема:
+
+  {
+
+  "message": "Курс может составлять только авторизованный пользователь"
+
+  }
+
+- Код ответа: 401
+
+В остальных случаях
+
+- Схема:
+
+  {
+
+  "message": "Error"
+
+  }
+
+- Код ответа: 400
+
+
+## Создание контента для заданного курса
+
+### Точка Входа
+
+- Точка входа для регистрации: **/api/courses/{id}/content**
+
+### Запрос
+
+- Метод: **PATCH**
+
+- Схема:
+
+{
+
+"content": "Проверка in aut ipsa velit sed et. Unde in temporibus magni. Rem rerum eius ut repellat quaerat sed. Quos atque velit similique deserunt beatae qui maiores. Autem accusantium unde perspiciatis quasi non cumque sapiente. Qui molestiae impedit fuga voluptatum eum quia. Quam in impedit doloremque qui rerum inventore quis. Debitis animi esse проверка."
+
+}
+
+### Ответ
+
+#### Успех
+
+- Схема:
+
+  {
+
+  "message": "Success"
+
+  }
+
+- Код ответа: 200
+
+#### Неудача
+
+В случае если пользователь не авторизован
+
+- Схема:
+
+  {
+
+  "message": "Содержание курса может создавать только авторизованый пользователь"
+
+  }
+
+- Код ответа: 401
+
+В случае если контент пытается создать не автор курса
+
+- Схема:
+
+  {
+
+  "message": "Содержание курса может создавать только автор курса"
+
+  }
+
+- Код ответа: 401
+
+В остальных случаях
+
+- Схема:
+
+  {
+
+  "message": "Error"
+
+  }
+
+- Код ответа: 400
+
+
+## Страница контента заданного курса
+
+### Точка Входа
+
+- Точка входа для регистрации: **/api/courses/{id}/content**
+
+### Запрос
+
+- Метод: **GET**
+
+### Ответ
+
+#### Успех
+
+- Схема:
+
+  {
+
+  "content": "Ea in aut ipsa velit sed et. Unde in temporibus magni. Rem rerum eius ut repellat quaerat sed. Quos atque velit similique deserunt beatae qui maiores. Autem accusantium unde perspiciatis quasi non cumque sapiente. Qui molestiae impedit fuga voluptatum eum quia. Quam in impedit doloremque qui rerum inventore quis. Debitis animi esse iusto."
+
+  }
+- 
+- Код ответа: 200
+
+#### Неудача
+
+- Схема:
+
+  {
+
+  "message": "Отсутсвует содержимое курса"
+
+  }
+
+- Код ответа: 404
+

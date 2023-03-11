@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Courses\ContentController;
 use App\Http\Controllers\Courses\CourseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,8 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::post('courses', [CourseController::class, 'createCourse']);
 
+    Route::patch('courses/{id}/content', [ContentController::class, 'createContent']);
+
     Route::group(['middleware' => 'auth:api'], function () {
 
     });
@@ -35,3 +38,5 @@ Route::group(['middleware' => 'api'], function () {
 
 Route::get('courses', [CourseController::class, 'getCourses']);
 Route::get('courses/{id}', [CourseController::class, 'getCourseById']);
+
+Route::get('courses/{id}/content', [ContentController::class, 'getContentByCourseId']);
