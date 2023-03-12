@@ -44,13 +44,22 @@ _Во всех запросах должен присутствовать header
   "message": "Success"
 
   }
-  - Код ответа: 200
+- 
+- Код ответа: 200
 
 - Cookies
 
         [
     
-        name: 'token'
+        name: 'access_token'
+    
+        value: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU1NTUvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjc4MzYzNTQ1LCJleHAiOjE2NzgzNjM2MDUsIm5iZiI6MTY3ODM2MzU0NSwianRpIjoib09HS2pxamxCbnFDZWw2TyIsInN1YiI6IjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.cG7nSAWAaWAh_jDkBnZupu71HQp8gkt2YNt9N3-mQ3Q'
+        
+        ]
+
+        [
+
+        name: 'refresh_token'
     
         value: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU1NTUvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjc4MzYzNTQ1LCJleHAiOjE2NzgzNjM2MDUsIm5iZiI6MTY3ODM2MzU0NSwianRpIjoib09HS2pxamxCbnFDZWw2TyIsInN1YiI6IjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.cG7nSAWAaWAh_jDkBnZupu71HQp8gkt2YNt9N3-mQ3Q'
         
@@ -123,7 +132,15 @@ _Во всех запросах должен присутствовать header
 
         [
     
-        name: 'token'
+        name: 'access_token'
+    
+        value: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU1NTUvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjc4MzYzNTQ1LCJleHAiOjE2NzgzNjM2MDUsIm5iZiI6MTY3ODM2MzU0NSwianRpIjoib09HS2pxamxCbnFDZWw2TyIsInN1YiI6IjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.cG7nSAWAaWAh_jDkBnZupu71HQp8gkt2YNt9N3-mQ3Q'
+        
+        ]
+
+        [
+
+        name: 'refresh_token'
     
         value: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU1NTUvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjc4MzYzNTQ1LCJleHAiOjE2NzgzNjM2MDUsIm5iZiI6MTY3ODM2MzU0NSwianRpIjoib09HS2pxamxCbnFDZWw2TyIsInN1YiI6IjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.cG7nSAWAaWAh_jDkBnZupu71HQp8gkt2YNt9N3-mQ3Q'
         
@@ -214,10 +231,18 @@ _Во всех запросах должен присутствовать header
 
 - Cookies
 
+       [
+    
+        name: 'access_token'
+    
+        value: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU1NTUvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjc4MzYzNTQ1LCJleHAiOjE2NzgzNjM2MDUsIm5iZiI6MTY3ODM2MzU0NSwianRpIjoib09HS2pxamxCbnFDZWw2TyIsInN1YiI6IjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.cG7nSAWAaWAh_jDkBnZupu71HQp8gkt2YNt9N3-mQ3Q'
+        
+        ]
+
         [
 
-        name: 'token'
-
+        name: 'refresh_token'
+    
         value: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU1NTUvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjc4MzYzNTQ1LCJleHAiOjE2NzgzNjM2MDUsIm5iZiI6MTY3ODM2MzU0NSwianRpIjoib09HS2pxamxCbnFDZWw2TyIsInN1YiI6IjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.cG7nSAWAaWAh_jDkBnZupu71HQp8gkt2YNt9N3-mQ3Q'
         
         ]

@@ -19,7 +19,7 @@ class ContentModel extends Model
         'content',
     ];
 
-    public function course (): HasOne
+    public function courseModel (): HasOne
     {
         return $this->hasOne(CourseModel::class);
     }

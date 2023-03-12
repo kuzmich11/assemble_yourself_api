@@ -30,14 +30,19 @@ class CourseModel extends Model
         'course_program',
     ];
 
+    protected $casts = [
+        'start_date' => 'datetime:d-m-Y', // Свой формат
+        'end_date' => 'datetime:d-m-Y',
+    ];
+
     public function user():BelongsTo
     {
         return $this->belongsTo(User::class, 'author');
     }
 
-    public function content (): HasOne
+    public function contentModel (): HasOne
     {
-        return $this->hasOne(ContentModel::class);
+        return $this->hasOne(ContentModel::class, 'course_id');
     }
 
 //    public function getJWTIdentifier()

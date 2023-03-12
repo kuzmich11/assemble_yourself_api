@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CourseModelFactory extends Factory
@@ -13,13 +14,13 @@ class CourseModelFactory extends Factory
             'description' => fake()->text(250),
             'tag' => fake()->text(15),
             'cover_url' => fake()->url(),
-            'author' => 1,
-            'start_date' => fake()->date('d-m-Y'),
-            'end_date' => fake()->date('d-m-Y'),
-            'course_program' => [
+            'author' => User::factory(),
+            'start_date' => fake()->date(),
+            'end_date' => fake()->date(),
+            'course_program' => json_encode([
                 'heading' => fake()->jobTitle(),
                 'description' => fake()->text(),
-            ],
+            ]),
         ];
     }
 }

@@ -102,12 +102,13 @@ class AuthController extends Controller
      */
     protected function respondWithToken(string $token)
     {
-        $cookie = cookie('token', $token);
+        $access_token = cookie('access_token', $token, auth()->factory()->getTTL() * 5); //связанная настройка с config/jwt.php
+        $refresh_token = cookie('refresh_token', $token);
 //            json([
 //            'access_token' => $token,
 //            'token_type' => 'bearer',
 //            'expires_in' => auth()->factory()->getTTL() * 60
 //        ]));
-        return response(['message' => 'Success'])->withCookie($cookie);
+        return response(['message' => 'Success'])->withCookie($access_token)->withCookie($refresh_token);
     }
 }
