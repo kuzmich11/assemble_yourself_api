@@ -23,8 +23,16 @@ class CourseSeeder extends Seeder
         for ($i = 0; $i < 10; $i++) {
             $data[] = [
                 'course_name' => fake()->jobTitle(),
-                'author' => fake()->name(),
-                'price' => rand(100, 1000),
+                'description' => fake()->text(250),
+                'tag' => fake()->text(15),
+                'cover_url' => fake()->url(),
+                'author' => 1,
+                'start_date' => fake()->date(),
+                'end_date' => fake()->date(),
+                'course_program' => json_encode([
+                    'heading' => fake()->jobTitle(),
+                    'description' => fake()->text(250),
+                ]),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
