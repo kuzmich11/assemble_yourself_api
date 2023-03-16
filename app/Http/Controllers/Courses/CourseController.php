@@ -15,6 +15,7 @@ class CourseController extends Controller
         foreach ($courses as $course) {
             $author = User::where('id', '=',  $course['author'])->get()->first();
             $course['author'] = $author['name'];
+            $course['course_program'] = json_decode($course['course_program']);
         }
 
         return response()->json($courses);
@@ -25,6 +26,7 @@ class CourseController extends Controller
         $course = CourseModel::where('id', '=', $id)->first();
         $author = User::where('id', '=',  $course['author'])->get()->first();
         $course['author'] = $author['name'];
+        $course['course_program'] = json_decode($course['course_program']);
 
         if (!isset($course)) {
             return response(['message' => 'Такого курса не существует'], 404);
@@ -44,7 +46,7 @@ class CourseController extends Controller
             $author = $user->getKey();
             $start_date = $request->get('start_date');
             $end_date = $request->get('end_date');
-            $course_program = json_encode($request->get('course_program'));
+            $course_program = json_encode($request->get('course_program'), JSON_UNESCAPED_UNICODE);
 
             if (!isset($course_name) or !isset($description) or !isset($cover_url) or !isset($author) or !isset($course_program)) {
                 return response(['message' => 'Заполнены не все обязательные поля'], 400);

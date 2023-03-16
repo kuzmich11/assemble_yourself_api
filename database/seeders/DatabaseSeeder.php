@@ -21,11 +21,6 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-//        \DB::table('users')->insert([
-//            'name' => 'user',
-//            'email' => 'test@test.ru',
-//            'password' => 12345678,
-//        ]);
 
 //        $this->call([
 //            CourseSeeder::class,
@@ -49,10 +44,5 @@ class DatabaseSeeder extends Seeder
                     )
             )
             ->create();
-
-//        CourseModel::factory()
-//            ->count(5)
-//            ->hasUser(1)
-//            ->create();
     }
 }

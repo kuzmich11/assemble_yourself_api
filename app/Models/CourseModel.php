@@ -45,13 +45,4 @@ class CourseModel extends Model
         return $this->hasOne(ContentModel::class, 'course_id');
     }
 
-//    public function getJWTIdentifier()
-//    {
-//        return $this->getKey();
-//    }
-//
-//    public function getJWTCustomClaims(): array
-//    {
-//        return [];
-//    }
 }

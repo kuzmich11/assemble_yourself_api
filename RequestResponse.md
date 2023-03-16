@@ -272,6 +272,8 @@ _Во всех запросах должен присутствовать header
 
 - Метод: **POST**
 
+- BearerToken "token"
+
 ### Ответ
 
 #### Успех
@@ -321,15 +323,33 @@ _Во всех запросах должен присутствовать header
 
   "id": 1,
 
-  "course_name": "Psychiatrist",
+  "course_name": "Business Manager",
 
-  "author": "Dr. Alford Stiedemann MD",
+  "description": "Voluptate nam distinctio voluptas optio necessitatibus doloremque odio. Totam cumque eum et possimus. Odit alias debitis illum qui qui eligendi. Dolor consequuntur quis consectetur dignissimos velit enim est.",
+  
+  "tag": "Quia molestiae.",
 
-  "price": "476",
+  "cover_url": "http://lindgren.com/",
 
-  "created_at": "2023-03-02T16:39:18.000000Z",
+  "author": "Dr. Clyde Heaney V",
 
-  "updated_at": "2023-03-02T16:39:18.000000Z"
+  "start_date": "22-04-2011",
+
+  "end_date": "28-06-2010",
+
+  "course_program": 
+
+        {
+
+        "heading": "Night Security Guard",
+
+        "description": "Aliquam tempora voluptatem velit sequi qui autem voluptate. At quia ab eligendi aut doloremque quo fugit optio. Eligendi aspernatur suscipit doloribus est."
+        
+        },
+
+  "created_at": "2023-03-16T16:29:53.000000Z",
+
+  "updated_at": "2023-03-16T16:29:53.000000Z"
 
   }, ...
 
@@ -364,17 +384,36 @@ _Во всех запросах должен присутствовать header
 
   "id": 1,
 
-  "course_name": "Psychiatrist",
+  "course_name": "Business Manager",
 
-  "author": "Dr. Alford Stiedemann MD",
+  "description": "Voluptate nam distinctio voluptas optio necessitatibus doloremque odio. Totam cumque eum et possimus. Odit alias debitis illum qui qui eligendi. Dolor consequuntur quis consectetur dignissimos velit enim est.",
+  
+  "tag": "Quia molestiae.",
 
-  "price": "476",
+  "cover_url": "http://lindgren.com/",
 
-  "created_at": "2023-03-02T16:39:18.000000Z",
+  "author": "Dr. Clyde Heaney V",
 
-  "updated_at": "2023-03-02T16:39:18.000000Z"
+  "start_date": "22-04-2011",
 
-  }
+  "end_date": "28-06-2010",
+
+  "course_program": 
+
+        {
+
+        "heading": "Night Security Guard",
+
+        "description": "Aliquam tempora voluptatem velit sequi qui autem voluptate. At quia ab eligendi aut doloremque quo fugit optio. Eligendi aspernatur suscipit doloribus est."
+  
+        },
+
+  "created_at": "2023-03-16T16:29:53.000000Z",
+
+  "updated_at": "2023-03-16T16:29:53.000000Z"
+
+  },
+
 - Код ответа: 200
 
 #### Неудача
@@ -400,6 +439,8 @@ _Во всех запросах должен присутствовать header
 
 - Метод: **POST**
 
+- BearerToken "token"
+
 - Схема:
 
 {
@@ -416,13 +457,15 @@ _Во всех запросах должен присутствовать header
 
 "end_date": "2023-12-09",
 
-"course program": [
+"course program": 
 
-    {"heading": "php"},
+    {
 
-    {"description": "Краткое описание курса"}
+    "heading": "php",
 
-]
+    "description": "Краткое описание курса"
+
+    }
 
 }
 
@@ -476,6 +519,8 @@ _Во всех запросах должен присутствовать header
 ### Запрос
 
 - Метод: **PATCH**
+
+- BearerToken "token"
 
 - Схема:
 
