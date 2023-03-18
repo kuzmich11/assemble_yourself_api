@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CreateRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -19,17 +20,17 @@ class CreateRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
      */
-    public function rules($user_id): array
+    public function rules(): array
     {
         return [
             'course_name' => ['required', 'string'],
             'description' => ['required', 'string'],
             'tag' => ['nullable', 'string'],
             'cover_url' => ['nullable', 'string'],
-            'author' => $user_id,
+//            'author' => $this->user_id,
             'start_date' => ['nullable'],
             'end_date' => ['nullable'],
-            'course_program' => ['required, array'],
+            'course_program' => ['required', 'array'],
         ];
     }
 
