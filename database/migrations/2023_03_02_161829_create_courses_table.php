@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('course_name');
             $table->string('description');
             $table->string('tag')->nullable();
-            $table->string('cover_url');
+            $table->string('cover_url')->nullable();
             $table->foreignId('author')->references('id')->on('users')->cascadeOnDelete();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();

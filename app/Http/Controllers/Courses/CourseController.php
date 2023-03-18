@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Courses;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Courses\CreateRequest;
 use App\Models\CourseModel;
 use App\Models\User;
 use App\QueryBuilders\CoursesQueryBuilder;
@@ -37,7 +38,7 @@ class CourseController extends Controller
         return response()->json($course);
     }
 
-    public function createCourse(Request $request)
+    public function createCourse(CreateRequest $request)
     {
         $user = auth()->user();
 
@@ -49,10 +50,10 @@ class CourseController extends Controller
             $author = $user->getKey();
             $start_date = $request->get('start_date');
             $end_date = $request->get('end_date');
-//            dd($request->get('course_program'));
             $course_program = $request->get('course_program');
 
             if (!isset($course_name) or !isset($description) or !isset($cover_url) or !isset($author) or !isset($course_program)) {
+//            if ($request->validated()) {
                 return response(['message' => 'Заполнены не все обязательные поля'], 400);
             }
             $course = CourseModel::create([
@@ -65,6 +66,7 @@ class CourseController extends Controller
                 'end_date' => $end_date,
                 'course_program' => $course_program,
             ]);
+//            $course = CourseModel::create($request)
             if ($course) {
                 return response(['message' => 'Success'], 200);
             }

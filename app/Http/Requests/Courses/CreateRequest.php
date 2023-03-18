@@ -25,11 +25,31 @@ class CreateRequest extends FormRequest
             'course_name' => ['required', 'string'],
             'description' => ['required', 'string'],
             'tag' => ['nullable', 'string'],
-            'cover_url' => ['required', 'string'],
+            'cover_url' => ['nullable', 'string'],
             'author' => $user_id,
             'start_date' => ['nullable'],
             'end_date' => ['nullable'],
             'course_program' => ['required, array'],
         ];
     }
+
+    public function attributes(): array
+    {
+        return [
+            'course_name' => 'НАЗВАНИЕ КУРСА',
+            'description' => 'ОПИСАНИЕ КУРСА',
+            'course_program' => 'ПРОГРАММА КУРСА',
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function messages (): array
+    {
+        return [
+            'required' => 'Поле :attribute обязательно для заполнения',
+        ];
+    }
+
 }
