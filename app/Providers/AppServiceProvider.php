@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+
+use App\QueryBuilders\CoursesQueryBuilder;
+use App\QueryBuilders\QueryBuilder;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(QueryBuilder::class, CoursesQueryBuilder::class);
     }
 
     /**
@@ -19,6 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Paginator::useBootstrapFour();
     }
 }
