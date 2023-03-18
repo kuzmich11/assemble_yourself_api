@@ -5,28 +5,31 @@ namespace App\Http\Controllers\Courses;
 use App\Http\Controllers\Controller;
 use App\Models\CourseModel;
 use App\Models\User;
+use App\QueryBuilders\CoursesQueryBuilder;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
-    public function getCourses()
+    public function getCourses(CoursesQueryBuilder $coursesQueryBuilder)
     {
-        $courses = CourseModel::get();
-        foreach ($courses as $course) {
-            $author = User::where('id', '=',  $course['author'])->get()->first();
-            $course['author'] = $author['name'];
-            $course['course_program'] = json_decode($course['course_program']);
-        }
+//        $courses = CourseModel::get();
+//        foreach ($courses as $course) {
+//            $author = User::where('id', '=',  $course['author'])->get()->first();
+//            $course['author'] = $author['name'];
+//            $course['course_program'] = json_decode($course['course_program']);
+//        }
+        $courses = $coursesQueryBuilder->getAll();
 
         return response()->json($courses);
     }
 
-    public function getCourseById(int $id)
+    public function getCourseById(CoursesQueryBuilder $coursesQueryBuilder, int $id)
     {
-        $course = CourseModel::where('id', '=', $id)->first();
-        $author = User::where('id', '=',  $course['author'])->get()->first();
-        $course['author'] = $author['name'];
-        $course['course_program'] = json_decode($course['course_program']);
+//        $course = CourseModel::where('id', '=', $id)->first();
+//        $author = User::where('id', '=',  $course['author'])->get()->first();
+//        $course['author'] = $author['name'];
+//        $course['course_program'] = json_decode($course['course_program']);
+        $course = $coursesQueryBuilder->getCourseById($id);
 
         if (!isset($course)) {
             return response(['message' => 'Такого курса не существует'], 404);
@@ -46,7 +49,8 @@ class CourseController extends Controller
             $author = $user->getKey();
             $start_date = $request->get('start_date');
             $end_date = $request->get('end_date');
-            $course_program = json_encode($request->get('course_program'), JSON_UNESCAPED_UNICODE);
+//            dd($request->get('course_program'));
+            $course_program = $request->get('course_program');
 
             if (!isset($course_name) or !isset($description) or !isset($cover_url) or !isset($author) or !isset($course_program)) {
                 return response(['message' => 'Заполнены не все обязательные поля'], 400);

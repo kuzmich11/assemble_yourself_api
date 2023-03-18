@@ -33,6 +33,7 @@ class CourseModel extends Model
     protected $casts = [
         'start_date' => 'datetime:d-m-Y', // Свой формат
         'end_date' => 'datetime:d-m-Y',
+        'course_program' => 'array',
     ];
 
     public function user():BelongsTo
