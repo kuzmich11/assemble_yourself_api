@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -89,7 +88,6 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-
         return $this->respondWithToken(auth()->refresh());
     }
 
