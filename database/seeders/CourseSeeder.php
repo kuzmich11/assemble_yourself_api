@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -14,19 +16,21 @@ class CourseSeeder extends Seeder
      */
     public function run(): void
     {
-        \DB::table('courses')->insert($this->getData());
+        \DB::table('courses')->insert($this->getData(10));
     }
 
-    private function getData(): array
+    private function getData($quantity): array
     {
         $data = [];
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < $quantity; $i++) {
             $data[] = [
-                'course_name' => fake()->jobTitle(),
-                'author' => fake()->name(),
-                'price' => rand(100, 1000),
-                'created_at' => now(),
-                'updated_at' => now(),
+//                'section_id' => mt_rand(1,10),
+                'author_id' => mt_rand(1,10),
+                'title' => \fake()->jobTitle(),
+                'description' => \fake()->text(),
+                'price' => round(mt_rand(100000, 100000000) / 100, 2),
+                'start_date' => \now(),
+                'end_date' => \now(),
             ];
         }
         return $data;
