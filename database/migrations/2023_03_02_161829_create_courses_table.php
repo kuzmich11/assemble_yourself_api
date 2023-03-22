@@ -23,8 +23,8 @@ return new class extends Migration
             $table->foreignId('author_id')->references('id')->on('users')->cascadeOnDelete();
             $table->string('title');
             $table->text('description');
-            $table->timestamps('start_date');
-            $table->timestamps('end_date');
+            $table->timestamp('start_date');
+            $table->timestamp('end_date');
             $table->float('price');
             $table->json('metadata')->nullable();
         });

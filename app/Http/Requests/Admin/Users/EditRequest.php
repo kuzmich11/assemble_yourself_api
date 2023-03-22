@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests\Admin\Users;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EditUserRequest extends FormRequest
+class EditRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -44,7 +44,6 @@ class EditUserRequest extends FormRequest
             'is_author' => 'Тип пользователя (авторство)',
             'username' => 'Никнейм',
             'first_name' => 'Имя',
-            'name' => 'Имя',
             'last_name' => 'Фамилия',
             'email' => 'Почта',
             'password' => 'Пароль',

@@ -5,15 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\CreateUserRequest;
-use App\Http\Requests\Admin\EditUserRequest;
+use App\Http\Requests\Admin\Users\CreateRequest as CreateUserRequest;
+use App\Http\Requests\Admin\Users\EditRequest  as EditUserRequest;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -53,16 +50,6 @@ class UsersController extends Controller
                 ->with('status', 'Новый пользователь успешно добавлен!');
         }
         return \back()->with('error', 'Не удалось добавить нового пользователя!');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**

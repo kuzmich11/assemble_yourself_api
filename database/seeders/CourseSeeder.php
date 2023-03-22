@@ -16,7 +16,7 @@ class CourseSeeder extends Seeder
      */
     public function run(): void
     {
-        \DB::table('courses')->insert($this->getData(10));
+        \DB::table('courses')->insert($this->getData(5));
     }
 
     private function getData($quantity): array
@@ -25,7 +25,7 @@ class CourseSeeder extends Seeder
         for ($i = 0; $i < $quantity; $i++) {
             $data[] = [
 //                'section_id' => mt_rand(1,10),
-                'author_id' => mt_rand(1,10),
+                'author_id' => mt_rand(1,5),
                 'title' => \fake()->jobTitle(),
                 'description' => \fake()->text(),
                 'price' => round(mt_rand(100000, 100000000) / 100, 2),

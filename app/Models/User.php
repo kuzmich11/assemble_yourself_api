@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -46,15 +49,22 @@ class User extends Authenticatable implements JWTSubject
      * @var array<string, string>
      */
     protected $casts = [
+        'courses_ids' => 'array',
         'email_verified_at' => 'datetime',
         'is_admin' => 'boolean',
     ];
 
-    public function users():BelongsToMany
+    // найти на каких курсах учится пользователь
+    public function courses(): BelongsToMany
     {
-        return $this->belongsToMany(Course::class, 'courses_has_users', 'user_id', 'course_id', 'id', 'id');
+        return $this->belongsToMany(Course::class, 'courses_has_users');
     }
 
+    // найти все курсы автора
+    public function hasCourses(): HasMany
+    {
+        return $this->hasMany(Course::class);
+    }
 
     public function getJWTIdentifier()
     {

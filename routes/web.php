@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Admin\IndexController as AdminController;
 use App\Http\Controllers\Api\Admin\UsersController as AdminUsersController;
+use App\Http\Controllers\Api\Admin\CoursesController as AdminCoursesController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +35,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], static function() {
     Route::get('/', AdminController::class)->name('index');
     Route::resource('/users', AdminUsersController::class);
+    Route::resource('/courses', AdminCoursesController::class);
 });
 
 
