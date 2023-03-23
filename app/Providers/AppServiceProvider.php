@@ -2,27 +2,27 @@
 
 namespace App\Providers;
 
+
+use App\QueryBuilders\CoursesQueryBuilder;
+use App\QueryBuilders\QueryBuilder;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
-        //
+        $this->app->bind(QueryBuilder::class, CoursesQueryBuilder::class);
     }
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        //
+        Paginator::useBootstrapFour();
     }
 }
