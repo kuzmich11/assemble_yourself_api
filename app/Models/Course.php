@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Sanctum\HasApiTokens;
@@ -12,49 +15,42 @@ class Course extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $table = 'courses';
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'course_name',
-        'author',
+        'author_id',
+        'title',
+        'description',
+        'start_date',
+        'end_date',
         'price',
+        'metadata',
     ];
 
-    public function courses():BelongsToMany
+    protected $casts = [
+        'users_ids' => 'array',
+    ];
+
+    protected $dates = [
+        'start_date',
+        'end_date',
+    ];
+
+    // найти учеников на курсе
+    public function studies(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'courses_has_users', 'course_id', 'user_id', 'id', 'id');
+        return $this->belongsToMany(User::class, 'courses_has_users');
     }
 
-    // /**
-    //  * The attributes that should be hidden for serialization.
-    //  *
-    //  * @var array<int, string>
-    //  */
-    // protected $hidden = [
-    //     'password',
-    //     'remember_token',
-    // ];
-
-    // /**
-    //  * The attributes that should be cast.
-    //  *
-    //  * @var array<string, string>
-    //  */
-    // protected $casts = [
-    //     'email_verified_at' => 'datetime',
-    // ];
-
-    public function getJWTIdentifier()
+    // найти автора курса
+    public function author(): BelongsTo
     {
-        return $this->getKey();
+        return $this->belongsTo(User::class);
     }
 
-    public function getJWTCustomClaims(): array
-    {
-        return [];
-    }
 }

@@ -1,6 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Admin\IndexController as AdminController;
+use App\Http\Controllers\Api\Admin\UsersController as AdminUsersController;
+use App\Http\Controllers\Api\Admin\CoursesController as AdminCoursesController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +27,15 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'is_admin'], static function() {
+//    Route::get('/', AdminController::class)->name('index');
+//});
+
+Route::group(['prefix' => 'admin', 'as' => 'admin.'], static function() {
+    Route::get('/', AdminController::class)->name('index');
+    Route::resource('/users', AdminUsersController::class);
+    Route::resource('/courses', AdminCoursesController::class);
+});
+
+
