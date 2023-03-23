@@ -27,7 +27,6 @@ class CreateRequest extends FormRequest
             'description' => ['required', 'string'],
             'tag' => ['nullable', 'string'],
             'cover_url' => ['nullable', 'string'],
-//            'author' => $this->user_id,
             'start_date' => ['nullable'],
             'end_date' => ['nullable'],
             'course_program' => ['required', 'array'],
