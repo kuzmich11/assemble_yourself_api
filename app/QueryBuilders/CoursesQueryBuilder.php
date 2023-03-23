@@ -29,7 +29,7 @@ class CoursesQueryBuilder extends QueryBuilder
         return $courses;
     }
 
-    public function getCoursesWithPagination(int $quantity = 5): LengthAwarePaginator
+    public function getCoursesWithPagination(int $quantity = 10): LengthAwarePaginator
     {
         $courses = $this->model->paginate($quantity);
         foreach ($courses as $course) {
