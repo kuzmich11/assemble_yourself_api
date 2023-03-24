@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+
+use App\QueryBuilders\CoursesQueryBuilder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -64,9 +66,11 @@ class AuthController extends Controller
      *
      * @return JsonResponse
      */
-    public function me()
+    public function me(CoursesQueryBuilder $coursesQueryBuilder)
     {
-        return response()->json(auth()->user());
+        $user = auth()->user();
+        $courses = $coursesQueryBuilder->getCoursesByAuthor($user->getKey());
+        return response()->json([$user, $courses]);
     }
 
     /**

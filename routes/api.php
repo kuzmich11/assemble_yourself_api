@@ -27,6 +27,8 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::post('courses', [CourseController::class, 'createCourse']);
 
+    Route::patch('courses/{id}', [CourseController::class, 'updateCourse']);
+
     Route::patch('courses/{id}/content', [ContentController::class, 'createContent']);
 
     Route::group(['middleware' => 'auth:api'], function () {
