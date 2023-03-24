@@ -29,6 +29,8 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::patch('courses/{id}', [CourseController::class, 'updateCourse']);
 
+    Route::delete('courses/{id}', [CourseController::class, 'deleteCourse']);
+
     Route::patch('courses/{id}/content', [ContentController::class, 'createContent']);
 
     Route::group(['middleware' => 'auth:api'], function () {

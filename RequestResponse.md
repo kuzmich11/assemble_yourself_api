@@ -5,7 +5,6 @@ _Во всех запросах должен присутствовать header
 [
 
     Key: "X-Requested-With"
-
     Value: "XMLHttpRequest"
 
 ]
@@ -50,19 +49,13 @@ _Во всех запросах должен присутствовать header
 - Cookies
 
         [
-    
         name: 'access_token'
-    
         value: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU1NTUvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjc4MzYzNTQ1LCJleHAiOjE2NzgzNjM2MDUsIm5iZiI6MTY3ODM2MzU0NSwianRpIjoib09HS2pxamxCbnFDZWw2TyIsInN1YiI6IjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.cG7nSAWAaWAh_jDkBnZupu71HQp8gkt2YNt9N3-mQ3Q'
-        
         ]
 
         [
-
-        name: 'refresh_token'
-    
-        value: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU1NTUvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjc4MzYzNTQ1LCJleHAiOjE2NzgzNjM2MDUsIm5iZiI6MTY3ODM2MzU0NSwianRpIjoib09HS2pxamxCbnFDZWw2TyIsInN1YiI6IjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.cG7nSAWAaWAh_jDkBnZupu71HQp8gkt2YNt9N3-mQ3Q'
-        
+        name: 'refresh_token' 
+        value: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU1NTUvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjc4MzYzNTQ1LCJleHAiOjE2NzgzNjM2MDUsIm5iZiI6MTY3ODM2MzU0NSwianRpIjoib09HS2pxamxCbnFDZWw2TyIsInN1YiI6IjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.cG7nSAWAaWAh_jDkBnZupu71HQp8gkt2YNt9N3-mQ3Q' 
         ]
 
 #### Неудача
@@ -131,19 +124,13 @@ _Во всех запросах должен присутствовать header
 - Cookies
 
         [
-    
         name: 'access_token'
-    
         value: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU1NTUvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjc4MzYzNTQ1LCJleHAiOjE2NzgzNjM2MDUsIm5iZiI6MTY3ODM2MzU0NSwianRpIjoib09HS2pxamxCbnFDZWw2TyIsInN1YiI6IjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.cG7nSAWAaWAh_jDkBnZupu71HQp8gkt2YNt9N3-mQ3Q'
-        
         ]
 
         [
-
-        name: 'refresh_token'
-    
-        value: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU1NTUvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjc4MzYzNTQ1LCJleHAiOjE2NzgzNjM2MDUsIm5iZiI6MTY3ODM2MzU0NSwianRpIjoib09HS2pxamxCbnFDZWw2TyIsInN1YiI6IjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.cG7nSAWAaWAh_jDkBnZupu71HQp8gkt2YNt9N3-mQ3Q'
-        
+        name: 'refresh_token' 
+        value: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU1NTUvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjc4MzYzNTQ1LCJleHAiOjE2NzgzNjM2MDUsIm5iZiI6MTY3ODM2MzU0NSwianRpIjoib09HS2pxamxCbnFDZWw2TyIsInN1YiI6IjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.cG7nSAWAaWAh_jDkBnZupu71HQp8gkt2YNt9N3-mQ3Q' 
         ]
 
 #### Неудача
@@ -256,20 +243,14 @@ _Во всех запросах должен присутствовать header
 
 - Cookies
 
-       [
-    
+        [
         name: 'access_token'
-    
         value: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU1NTUvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjc4MzYzNTQ1LCJleHAiOjE2NzgzNjM2MDUsIm5iZiI6MTY3ODM2MzU0NSwianRpIjoib09HS2pxamxCbnFDZWw2TyIsInN1YiI6IjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.cG7nSAWAaWAh_jDkBnZupu71HQp8gkt2YNt9N3-mQ3Q'
-        
         ]
 
         [
-
         name: 'refresh_token'
-    
         value: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU1NTUvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjc4MzYzNTQ1LCJleHAiOjE2NzgzNjM2MDUsIm5iZiI6MTY3ODM2MzU0NSwianRpIjoib09HS2pxamxCbnFDZWw2TyIsInN1YiI6IjgiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.cG7nSAWAaWAh_jDkBnZupu71HQp8gkt2YNt9N3-mQ3Q'
-        
         ]
 
 #### Неудача
@@ -365,11 +346,8 @@ _Во всех запросах должен присутствовать header
   "course_program": 
 
         {
-
         "heading": "Night Security Guard",
-
-        "description": "Aliquam tempora voluptatem velit sequi qui autem voluptate. At quia ab eligendi aut doloremque quo fugit optio. Eligendi aspernatur suscipit doloribus est."
-        
+        "description": "Aliquam tempora voluptatem velit sequi qui autem voluptate. At quia ab eligendi aut doloremque quo fugit optio. Eligendi aspernatur suscipit doloribus est." 
         },
 
   "created_at": "2023-03-16T16:29:53.000000Z",
@@ -426,11 +404,8 @@ _Во всех запросах должен присутствовать header
   "course_program": 
 
         {
-
         "heading": "Night Security Guard",
-
         "description": "Aliquam tempora voluptatem velit sequi qui autem voluptate. At quia ab eligendi aut doloremque quo fugit optio. Eligendi aspernatur suscipit doloribus est."
-  
         },
 
   "created_at": "2023-03-16T16:29:53.000000Z",
@@ -485,11 +460,8 @@ _Во всех запросах должен присутствовать header
 "course program": 
 
     {
-
     "heading": "php",
-
     "description": "Краткое описание курса"
-
     }
 
 }
@@ -566,11 +538,8 @@ _Во всех запросах должен присутствовать header
 "course program":
 
     {
-
     "heading": "php",
-
     "description": "Краткое описание курса"
-
     }
 
 }
@@ -638,6 +607,70 @@ _Во всех запросах должен присутствовать header
   }
 
 - Код ответа: 400
+
+## Удаление курса
+
+### Точка Входа
+
+- Точка входа для изменения курса: **/api/courses/{id}**
+
+### Запрос
+
+- Метод: **DELETE**
+
+- BearerToken "token"
+
+### Ответ
+
+#### Успех
+
+- Схема:
+
+  {
+
+  "message": "Success"
+
+  }
+
+- Код ответа: 200
+
+#### Неудача
+
+В случае если пользователь не авторизован
+
+- Схема:
+
+  {
+
+  "message": "Курс может удалить только авторизованный пользователь"
+
+  }
+
+- Код ответа: 401
+
+В случае если курс с заданным id не существует
+
+- Схема:
+
+  {
+
+  "message": "Такого курса не существует"
+
+  }
+
+- Код ответа: 404
+
+В случае если курс пытается поменять не автор курса
+
+- Схема:
+
+  {
+
+  "message": "Курс может удалить только авторизованный пользователь"
+
+  }
+
+- Код ответа: 401
 
 
 ## Создание контента для заданного курса

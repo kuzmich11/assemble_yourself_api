@@ -36,14 +36,17 @@ class CoursesQueryBuilder extends QueryBuilder
             $author = User::where('id', '=', $course['author'])->get()->first();
             $course['author'] = $author['name'];
         }
+
         return $courses;
     }
 
     public function getCourseById($id): Model|null
     {
         $course = $this->model->where('id', '=', $id)->first();
-        $author = User::where('id', '=',  $course['author'])->get()->first();
-        $course['author'] = $author['name'];
+        if (isset($course)) {
+            $author = User::where('id', '=',  $course['author'])->get()->first();
+            $course['author'] = $author['name'];
+        }
 
         return $course;
     }
@@ -58,11 +61,12 @@ class CoursesQueryBuilder extends QueryBuilder
     public function getCoursesByAuthor($author_id)
     {
         $courses = $this->model->where('author', '=', $author_id)->get();
-        foreach ($courses as $course) {
-            $author = User::where('id', '=', $author_id)->get()->first();
-            $course['author'] = $author['name'];
+        if (isset($course)) {
+            foreach ($courses as $course) {
+                $author = User::where('id', '=', $author_id)->get()->first();
+                $course['author'] = $author['name'];
+            }
         }
-
         return $courses;
     }
 

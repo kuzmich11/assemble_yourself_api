@@ -76,4 +76,24 @@ class CourseController extends Controller
         }
         return response(['message' => 'Курс может менять только авторизованный пользователь'], 401);
     }
+
+    public function deleteCourse(CoursesQueryBuilder $coursesQueryBuilder, int $id)
+    {
+        $user = auth()->user();
+
+        if (isset($user)) {
+            $course = $coursesQueryBuilder->getCourseByIdWithAuthorId($id);
+
+            if (isset($course)) {
+
+                if ($course['author'] === $user->getKey()) {
+                    $course->delete();
+                    return response(['message' => 'Success'], 200);
+                }
+                return response(['message' => 'Курс может удалить только его создатель'], 401);
+            }
+            return response(['message' => 'Такого курса не существует'], 404);
+        }
+        return response(['message' => 'Курс может удалить только авторизованный пользователь'], 401);
+    }
 }
