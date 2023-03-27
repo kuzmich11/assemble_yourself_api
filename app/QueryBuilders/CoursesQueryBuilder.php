@@ -61,7 +61,7 @@ class CoursesQueryBuilder extends QueryBuilder
     public function getCoursesByAuthor($author_id)
     {
         $courses = $this->model->where('author', '=', $author_id)->get();
-        if (isset($course)) {
+        if (isset($courses)) {
             foreach ($courses as $course) {
                 $author = User::where('id', '=', $author_id)->get()->first();
                 $course['author'] = $author['name'];
