@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->string('course_name');
-            $table->string('description');
+            $table->text('description');
             $table->string('tag')->nullable();
             $table->string('cover_url')->nullable();
             $table->foreignId('author')->references('id')->on('users')->cascadeOnDelete();
