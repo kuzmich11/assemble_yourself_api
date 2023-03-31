@@ -22,15 +22,12 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
-
-  **name: string**
-
-  **email: string**
-
-  **password: string**
-
-  }
+      {
+          "name": "string",
+          "email": "string",
+          "password": "string"
+          "about": "text"
+      }
 
 ### Ответ
 
@@ -38,11 +35,10 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
-
-  "message": "Success"
-
-  }
+      {
+          "id": int,
+          "message": "Success"
+      }
 - 
 - Код ответа: 200
 
@@ -64,13 +60,10 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
-
-  "error": true,
-
-  "message": "Пользователь с данным email уже существует"
-
-  }
+        {
+            "error": true,
+            "message": "Пользователь с данным email уже существует"
+        }
 
 - Код ответа: 400
 
@@ -78,13 +71,10 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
-
-  "error": true,
-
-  "message": "Не удалось зарегистрировать пользователя"
-
-  }
+        {
+            "error": true,
+            "message": "Не удалось зарегистрировать пользователя"
+        }
 
 - Код ответа: 400
 
@@ -150,11 +140,11 @@ _Во всех запросах должен присутствовать header
 
 ### Точка Входа
 
-- Точка входа для регистрации: **/api/me**
+- Точка входа для регистрации: **/api/profile**
 
 ### Запрос
 
-- Метод: **POST**
+- Метод: **GET**
 
 - BearerToken "token"
 
@@ -164,57 +154,50 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  [
-
-    {
-
-    "id": 4,
-
-    "name": "user",
-
-    "email": "test@test.ru",
-
-    "created_at": "2023-03-19T10:18:03.000000Z",
-
-    "updated_at": "2023-03-19T10:18:03.000000Z"
-
-    },
-
-    [
-
-        {
-        "id": 10,
-        "course_name": "php2",
-        "description": "Краткое описание курса",
-        "tag": "php",
-        "cover_url": "http://vandervort.biz/adipisci-ut-doloremque-non-asperiores-rerum-eos",
-        "author": "user",
-        "start_date": "09-12-2023",
-        "end_date": "09-12-2023",
-        "course_program": 
+        [
             {
-            "heading": "php",
-            "description": "Краткое описание курса"
+                "id": 4,
+                "name": "user",
+                "email": "test@test.ru",
+                "created_at": "2023-03-19T10:18:03.000000Z",
+                "updated_at": "2023-03-19T10:18:03.000000Z"
             },
-        "created_at": "2023-03-19T16:51:29.000000Z",
-        "updated_at": "2023-03-19T16:51:29.000000Z"
-        }, ...
+                [
+                    {
+                        "id": 10,
+                        "course_name": "php2",
+                        "description": "Краткое описание курса",
+                        "tag": "php",
+                        "cover_url": "http://vandervort.biz/adipisci-ut-doloremque-non-asperiores-rerum-eos",
+                        "author": "user",
+                        "start_date": "09-12-2023",
+                        "end_date": "09-12-2023",
+                        "course_program": 
+                            [
+                                {
+                                    "heading": "php",
+                                    "description": "Краткое описание курса"
+                                },
+                                    "created_at": "2023-03-19T16:51:29.000000Z",
+                                    "updated_at": "2023-03-19T16:51:29.000000Z"
+                                }, ...
+                            ]
+                ]
+            }
+        ]
 
-    ]
-  }
 - Код ответа: 200
 
 #### Неудача
 
 - Схема:
 
-  {
-
-  "message": "Unauthenticated."
-
-  }
+        {
+            "message": "Unauthenticated."
+        }
 
 - Код ответа: 401
+
 
 ## Обновление токена
 
@@ -307,7 +290,56 @@ _Во всех запросах должен присутствовать header
 - Код ответа: 401
 
 
-# 2. Курсы
+# 2. Пользователи
+
+## Изменение пользователя
+
+### Точка Входа
+
+- Точка входа для регистрации: **/api/profile**
+
+### Запрос
+
+- Метод: **PUT**
+
+- BearerToken **"token"**
+
+- Схема:
+
+      {
+          "id": int,
+          "name": "string",
+          "email": "string",
+          "password": "string"
+          "about": "text"
+      }
+
+### Ответ
+
+#### Успех
+
+- Схема:
+
+      {
+          "id": int,
+          "message": "Success"
+      }
+-
+- Код ответа: 200
+
+#### Неудача
+
+Пользователь не авторизован.
+
+- Схема:
+
+        {
+            "message": "Авторизуйтесь для изменения профиля"
+        }
+
+- Код ответа: 401
+
+# 3. Курсы
 
 ## Получение списка всех курсов
 
@@ -443,28 +475,19 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-{
-
-"course_name": "php",
-
-"description": "Краткое описание курса",
-
-"tag": "php",
-
-"cover_url": "http://vandervort.biz/adipisci-ut-doloremque-non-asperiores-rerum-eos",
-
-"start_date": "2023-12-09",
-
-"end_date": "2023-12-09",
-
-"course program": 
-
-    {
-    "heading": "php",
-    "description": "Краткое описание курса"
-    }
-
-}
+        {
+            "course_name": "php",
+            "description": "Краткое описание курса",
+            "tag": "php",
+            "cover_url": "http://vandervort.biz/adipisci-ut-doloremque-non-asperiores-rerum-eos",
+            "start_date": "2023-12-09",
+            "end_date": "2023-12-09",
+            "course program":
+                {
+                    "heading": "php",
+                    "description": "Краткое описание курса"
+                }
+        }
 
 ### Ответ
 
@@ -472,11 +495,10 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
-
-  "message": "Success"
-
-  }
+        {
+            "id": 10,
+            "message": "Success"
+        }
 
 - Код ответа: 200
 
@@ -486,11 +508,9 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
-
-  "message": "Курс может составлять только авторизованный пользователь"
-
-  }
+        {
+            "message": "Курс может составлять только авторизованный пользователь"
+        }
 
 - Код ответа: 401
 
@@ -498,11 +518,9 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
-
-  "message": "Error"
-
-  }
+        {
+            "message": "Error"
+        }
 
 - Код ответа: 400
 
@@ -521,28 +539,19 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-{
-
-"course_name": "php",
-
-"description": "Краткое описание курса",
-
-"tag": "php",
-
-"cover_url": "http://vandervort.biz/adipisci-ut-doloremque-non-asperiores-rerum-eos",
-
-"start_date": "2023-12-09",
-
-"end_date": "2023-12-09",
-
-"course program":
-
-    {
-    "heading": "php",
-    "description": "Краткое описание курса"
-    }
-
-}
+        {
+            "course_name": "php",
+            "description": "Краткое описание курса",
+            "tag": "php",
+            "cover_url": "http://vandervort.biz/adipisci-ut-doloremque-non-asperiores-rerum-eos",
+            "start_date": "2023-12-09",
+            "end_date": "2023-12-09",
+            "course program":
+                {
+                    "heading": "php",
+                    "description": "Краткое описание курса"
+                }
+        }
 
 ### Ответ
 
@@ -564,11 +573,9 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
-
-  "message": "Курс может менять только авторизованный пользователь"
-
-  }
+        {
+            "message": "Курс может менять только авторизованный пользователь"
+        }
 
 - Код ответа: 401
 
@@ -576,11 +583,9 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
-
-  "message": "Такого курса не существует"
-
-  }
+        {
+            "message": "Такого курса не существует"
+        }
 
 - Код ответа: 404
 
@@ -588,23 +593,19 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
+        {
+            "message": "Описание курса может менять только автор курса"
+        }
 
-  "message": "Описание курса может менять только автор курса"
+- Код ответа: 403
 
-  }
-
-- Код ответа: 401
-
-В случае если заполнены не все одинаковые поля
+В случае если заполнены не все обязательные поля
 
 - Схема:
 
-  {
-
-  "message": "Заполнены не все обязательные поля"
-
-  }
+        {
+            "message": "Заполнены не все обязательные поля"
+        }
 
 - Код ответа: 400
 
@@ -640,11 +641,9 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
-
-  "message": "Курс может удалить только авторизованный пользователь"
-
-  }
+        {
+            "message": "Курс может удалить только авторизованный пользователь"
+        }
 
 - Код ответа: 401
 
@@ -652,11 +651,9 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
-
-  "message": "Такого курса не существует"
-
-  }
+        {
+            "message": "Такого курса не существует"
+        }
 
 - Код ответа: 404
 
@@ -664,13 +661,11 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
+        {
+            "message": "Курс может удалить только автор курса"
+        }
 
-  "message": "Курс может удалить только авторизованный пользователь"
-
-  }
-
-- Код ответа: 401
+- Код ответа: 403
 
 
 ## Создание контента для заданного курса
@@ -687,11 +682,9 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-{
-
-"content": "Проверка in aut ipsa velit sed et. Unde in temporibus magni. Rem rerum eius ut repellat quaerat sed. Quos atque velit similique deserunt beatae qui maiores. Autem accusantium unde perspiciatis quasi non cumque sapiente. Qui molestiae impedit fuga voluptatum eum quia. Quam in impedit doloremque qui rerum inventore quis. Debitis animi esse проверка."
-
-}
+        {
+          "content": "Проверка in aut ipsa velit sed et. Unde in temporibus magni. Rem rerum eius ut repellat quaerat sed. Quos atque velit similique deserunt beatae qui maiores. Autem accusantium unde perspiciatis quasi non cumque sapiente. Qui molestiae impedit fuga voluptatum eum quia. Quam in impedit doloremque qui rerum inventore quis. Debitis animi esse проверка."
+        }
 
 ### Ответ
 
@@ -699,11 +692,9 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
-
-  "message": "Success"
-
-  }
+        {
+            "message": "Success"
+        }
 
 - Код ответа: 200
 
@@ -713,11 +704,9 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
-
-  "message": "Содержание курса может создавать только авторизованый пользователь"
-
-  }
+        {
+            "message": "Содержание курса может создавать только авторизованый пользователь"
+        }
 
 - Код ответа: 401
 
@@ -725,23 +714,19 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
+        {
+            "message": "Содержание курса может создавать только автор курса"
+        }
 
-  "message": "Содержание курса может создавать только автор курса"
-
-  }
-
-- Код ответа: 401
+- Код ответа: 403
 
 В остальных случаях
 
 - Схема:
 
-  {
-
-  "message": "Error"
-
-  }
+        {
+            "message": "Error"
+        }
 
 - Код ответа: 400
 
@@ -762,23 +747,19 @@ _Во всех запросах должен присутствовать header
 
 - Схема:
 
-  {
+        {
+            "content": "Ea in aut ipsa velit sed et. Unde in temporibus magni. Rem rerum eius ut repellat quaerat sed. Quos atque velit similique deserunt beatae qui maiores. Autem accusantium unde perspiciatis quasi non cumque sapiente. Qui molestiae impedit fuga voluptatum eum quia. Quam in impedit doloremque qui rerum inventore quis. Debitis animi esse iusto."
+        }
 
-  "content": "Ea in aut ipsa velit sed et. Unde in temporibus magni. Rem rerum eius ut repellat quaerat sed. Quos atque velit similique deserunt beatae qui maiores. Autem accusantium unde perspiciatis quasi non cumque sapiente. Qui molestiae impedit fuga voluptatum eum quia. Quam in impedit doloremque qui rerum inventore quis. Debitis animi esse iusto."
-
-  }
-- 
 - Код ответа: 200
 
 #### Неудача
 
 - Схема:
 
-  {
-
-  "message": "Отсутсвует содержимое курса"
-
-  }
+        {
+            "message": "Отсутсвует содержимое курса"
+        }
 
 - Код ответа: 404
 

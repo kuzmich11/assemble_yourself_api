@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Users\CreateRequest;
 use App\Models\User;
 
 use App\QueryBuilders\CoursesQueryBuilder;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -21,35 +25,40 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login', 'refresh', 'register']]);
     }
 
-    public function register (Request $request) {
+    public function register (CreateRequest $request)
+    {
 
-        $name = $request->get('name');
-        $email = $request->get('email');
-        $password =  $request->get('password');
-
-        if (!isset($name) or !isset($email) or !isset($password)) {
-            return response(['error' => true, 'message' => 'Не удалось зарегистрировать пользователя'], 400);
-        }
-        if (User::where('email', '=', $email)->first() === null) {
+//        $name = $request->get('name');
+//        $email = $request->get('email');
+//        $password =  $request->get('password');
+//
+//        if (!isset($name) or !isset($email) or !isset($password)) {
+//            return response(['error' => true, 'message' => 'Не удалось зарегистрировать пользователя'], 400);
+//        }
+//        if (User::where('email', '=', $email)->first() === null) {
+        if ($valid = $request->validated()) {
             $user = User::create([
-                'name' => $name,
-                'email' => $email,
-                'password' => Hash::make($password),
+//                'name' => $name,
+//                'email' => $email,
+                ...$valid,
+                'password' => Hash::make($request['password']),
+
             ]);
             if ($user->save()) {
-//                return response(['message' => 'Пользователь успешно зарегистрирован'], 201);
                 return $this->login();
             }
-            return response(['error' => true, 'message' => 'Не удалось зарегистрировать пользователя'], 400);
         }
 
-        return response(['error' => true, 'message' => 'Пользователь с данным email уже существует'], 400);
+            return response(['error' => true, 'message' => 'Не удалось зарегистрировать пользователя'], 400);
+//        }
+
+//        return response(['error' => true, 'message' => 'Пользователь с данным email уже существует'], 400);
     }
 
     /**
      * Get a JWT via given credentials.
      *
-     * @return JsonResponse
+     * @return Application|\Illuminate\Foundation\Application|Response|ResponseFactory|JsonResponse
      */
     public function login()
     {
@@ -66,12 +75,12 @@ class AuthController extends Controller
      *
      * @return JsonResponse
      */
-    public function me(CoursesQueryBuilder $coursesQueryBuilder)
-    {
-        $user = auth()->user();
-        $courses = $coursesQueryBuilder->getCoursesByAuthor($user->getKey());
-        return response()->json([$user, $courses]);
-    }
+//    public function me(CoursesQueryBuilder $coursesQueryBuilder)
+//    {
+//        $user = auth()->user();
+//        $courses = $coursesQueryBuilder->getCoursesByAuthor($user->getKey());
+//        return response()->json([$user, $courses]);
+//    }
 
     /**
      * Log the user out (Invalidate the token).
@@ -88,7 +97,7 @@ class AuthController extends Controller
     /**
      * Refresh a token.
      *
-     * @return JsonResponse
+     * @return Application|\Illuminate\Foundation\Application|Response|ResponseFactory
      */
     public function refresh()
     {
@@ -100,7 +109,7 @@ class AuthController extends Controller
      *
      * @param string $token
      *
-     * @return JsonResponse
+     * @return Application|ResponseFactory|\Illuminate\Foundation\Application|Response
      */
     protected function respondWithToken(string $token)
     {
