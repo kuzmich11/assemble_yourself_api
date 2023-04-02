@@ -9,6 +9,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+/** @OA\Schema(
+ *     @OA\Xml(name="Content"),
+ *     @OA\Property(property="id", type="integer", readOnly="true", example="1"),
+ *     @OA\Property(property="course_id", type="integer", readOnly="true", description="ID курса"),
+ *     @OA\Property(property="content", type="string", readOnly="true", description="Содержание курса"),
+ *  )
+ *
+ * Class ContentModel
+ */
 class ContentModel extends Model
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;

@@ -4,6 +4,29 @@ namespace App\Http\Requests\Courses;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\RequestBody(
+ *     request="CourseArray",
+ *     description="Перечень свойств курса",
+ *     required=true,
+ *     @OA\JsonContent(
+ *     @OA\Property(property="course_name", type="string", description="Название курса"),
+ *     @OA\Property(property="description", type="string", description="Описание курса"),
+ *     @OA\Property(property="tag", type="string"),
+ *     @OA\Property(property="cover_url", type="string", description="URL адрес обложки"),
+ *     @OA\Property(property="start_date", type="string", format="date-time", description="Дата начала курса"),
+ *     @OA\Property(property="end_at", type="string", format="date-time", description="Дата окончания курса"),
+ *     @OA\Property(
+ *     property="course_program",
+ *     type="array",
+ *     description="Содержание программы курса",
+ *          @OA\Items (
+ *          type="object"
+ *          )
+ *     ),
+ *     )
+ * )
+ */
 class CreateRequest extends FormRequest
 {
 
@@ -45,7 +68,7 @@ class CreateRequest extends FormRequest
     /**
      * @return string[]
      */
-    public function messages (): array
+    public function messages(): array
     {
         return [
             'required' => 'Поле :attribute обязательно для заполнения',
