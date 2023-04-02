@@ -779,8 +779,33 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "User": {
-                                            "$ref": "#/components/schemas/User"
+                                        "id": {
+                                            "type": "integer",
+                                            "readOnly": "true",
+                                            "example": "1"
+                                        },
+                                        "name": {
+                                            "description": "Имя пользователя",
+                                            "type": "string",
+                                            "readOnly": "true"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "format": "email",
+                                            "readOnly": "true",
+                                            "example": "user1@mail.com"
+                                        },
+                                        "password": {
+                                            "type": "string",
+                                            "format": "password",
+                                            "minLength": 8,
+                                            "readOnly": "true",
+                                            "example": "PassWord12345"
+                                        },
+                                        "about": {
+                                            "type": "string",
+                                            "readOnly": "true",
+                                            "example": "Обо мне"
                                         },
                                         "Courses": {
                                             "$ref": "#/components/schemas/CourseModel"

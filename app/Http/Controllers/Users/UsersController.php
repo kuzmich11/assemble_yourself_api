@@ -29,13 +29,13 @@ class UsersController extends Controller
      *      response=200,
      *      description="Success",
      *      @OA\JsonContent(
+     *          @OA\Property(property="id", type="integer", readOnly="true", example="1"),
+     *          @OA\Property(property="name", type="string", readOnly="true", description="Имя пользователя"),
+     *          @OA\Property(property="email", type="string", readOnly="true", format="email", example="user1@mail.com"),
+     *          @OA\Property(property="password", type="string", readOnly="true", format="password", minLength=8, example="PassWord12345"),
+     *          @OA\Property(property="about", type="string", readOnly="true", example="Обо мне"),
      *          @OA\Property (
-     *              property="User",
-     *              type="object",
-     *              ref="#/components/schemas/User",
-     *          ),
-     *          @OA\Property (
-     *              property="Courses",
+     *              property="courses",
      *              type="object",
      *              ref="#/components/schemas/CourseModel",
      *          ),
@@ -54,7 +54,8 @@ class UsersController extends Controller
     {
         if ($user = auth()->user()) {
             $courses = $coursesQueryBuilder->getCoursesByAuthor($user->getKey());
-            return response()->json([$user, $courses]);
+            $user['courses'] = $courses;
+            return response()->json($user);
         }
         return response(['message'=>'Вы не авторизованы'], 401);
     }
