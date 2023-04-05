@@ -36,16 +36,38 @@ class CoursesQueryBuilder extends QueryBuilder
             $author = User::where('id', '=', $course['author'])->get()->first();
             $course['author'] = $author['name'];
         }
+
         return $courses;
     }
 
-    public function getCourseById($id): Model
+    public function getCourseById($id): Model|null
     {
-        $course = $this->model->where('id', '=', $id)->sole();
-        $author = User::where('id', '=',  $course['author'])->get()->first();
-        $course['author'] = $author['name'];
+        $course = $this->model->where('id', '=', $id)->first();
+        if (isset($course)) {
+            $author = User::where('id', '=',  $course['author'])->get()->first();
+            $course['author'] = $author['name'];
+        }
 
         return $course;
+    }
+
+    public function getCourseByIdWithAuthorId($id): Model|null
+    {
+
+        return $this->model->where('id', '=', $id)->first();
+
+    }
+
+    public function getCoursesByAuthor($author_id)
+    {
+        $courses = $this->model->where('author', '=', $author_id)->get();
+        if (isset($courses)) {
+            foreach ($courses as $course) {
+                $author = User::where('id', '=', $author_id)->get()->first();
+                $course['author'] = $author['name'];
+            }
+        }
+        return $courses;
     }
 
 }

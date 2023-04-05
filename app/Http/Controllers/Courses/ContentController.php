@@ -37,7 +37,7 @@ class ContentController extends Controller
                 }
                 return response(['message' => 'error'], 400);
             }
-            return response(['message' => 'Содержание курса может создавать только автор курса'], 401);
+            return response(['message' => 'Содержание курса может создавать только автор курса'], 403);
         }
         return response(['message' => 'Содержание курса может создавать только авторизованый пользователь'], 401);
     }

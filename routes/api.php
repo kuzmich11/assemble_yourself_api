@@ -4,6 +4,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Courses\ContentController;
 use App\Http\Controllers\Courses\CourseController;
+use App\Http\Controllers\Users\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,9 +24,14 @@ Route::group(['middleware' => 'api'], function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
-    Route::post('me', [AuthController::class, 'me']);
+    Route::get('profile', [UsersController::class, 'getProfileByToken']);
+    Route::put('profile', [UsersController::class, 'updateProfile']);
 
     Route::post('courses', [CourseController::class, 'createCourse']);
+
+    Route::patch('courses/{id}', [CourseController::class, 'updateCourse']);
+
+    Route::delete('courses/{id}', [CourseController::class, 'deleteCourse']);
 
     Route::patch('courses/{id}/content', [ContentController::class, 'createContent']);
 

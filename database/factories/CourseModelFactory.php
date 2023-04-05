@@ -17,10 +17,10 @@ class CourseModelFactory extends Factory
             'author' => User::factory(),
             'start_date' => fake()->date(),
             'end_date' => fake()->date(),
-            'course_program' => json_encode([
-                'heading' => fake()->jobTitle(),
-                'description' => fake()->text(),
-            ]),
+            'course_program' => [
+                ['heading' => fake()->jobTitle(), 'description' => fake()->text()],
+                ['heading' => fake()->jobTitle(), 'description' => fake()->text()],
+            ],
         ];
     }
 }
