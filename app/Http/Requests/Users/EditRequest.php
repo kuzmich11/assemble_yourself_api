@@ -5,6 +5,20 @@ namespace App\Http\Requests\Users;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @OA\RequestBody(
+ *     request="UserArray",
+ *     description="Перечень свойств пользователя",
+ *     required=true,
+ *     @OA\JsonContent(
+ *     @OA\Property(property="id", type="integer", example="1"),
+ *     @OA\Property(property="name", type="string", description="Имя пользователя"),
+ *     @OA\Property(property="email", type="string", format="email", example="user1@mail.com"),
+ *     @OA\Property(property="password", type="string", format="password", minLength=8, example="PassWord12345"),
+ *     @OA\Property(property="about", type="string", example="Обо мне"),
+ *     )
+ * )
+ */
 class EditRequest extends FormRequest
 {
     /**
@@ -23,6 +37,7 @@ class EditRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id' => ['required', 'integer'],
             'name' => ['required', 'string'],
             'email' => ['required', Rule::unique('users')->ignore($this->id)],
             'password' => ['required', 'string', 'min:8'],

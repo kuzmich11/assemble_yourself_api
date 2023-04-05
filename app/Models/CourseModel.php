@@ -10,6 +10,31 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+/** @OA\Schema(
+ *     @OA\Xml(name="Courses"),
+ *     @OA\Property(property="id", type="integer", readOnly="true", example="1"),
+ *     @OA\Property(property="course_name", type="string", readOnly="true", description="Название курса"),
+ *     @OA\Property(property="description", type="string", readOnly="true", description="Описание курса"),
+ *     @OA\Property(property="tag", type="string", readOnly="true"),
+ *     @OA\Property(property="cover_url", type="string", description="URL адрес обложки"),
+ *     @OA\Property(property="author", type="integer", readOnly="true", example="1"),
+ *     @OA\Property(property="start_date", type="string", format="date-time", description="Дата начала курса", readOnly="true"),
+ *     @OA\Property(property="end_date", type="string", format="date-time", description="Дата окончания курса", readOnly="true"),
+ *     @OA\Property(
+ *     property="course_program",
+ *     type="array",
+ *     description="Содержание программы курса",
+ *          @OA\Items (
+ *          type="object"
+ *          )
+ *     ),
+ *     @OA\Property(property="created_at", type="string", format="date-time", description="Initial creation timestamp", readOnly="true"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", description="Last update timestamp", readOnly="true"),
+ *     @OA\Property(property="deleted_at", type="string", format="date-time", description="Soft delete timestamp", readOnly="true")
+ * )
+ *
+ * Class CourseModel
+ */
 class CourseModel extends Model
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;

@@ -7,9 +7,32 @@ use App\Http\Requests\Courses\CreateRequest;
 use App\Models\ContentModel;
 use App\Models\CourseModel;
 use App\QueryBuilders\CoursesQueryBuilder;
+use Illuminate\Http\Request;
+use OpenApi\Annotations\OpenApi as OA;
 
+ /**
+ * @OA\Tag(
+ *     name="courses",
+ *     description="Контроллер обеспечивает все операции с курсами"
+ * )
+ */
 class CourseController extends Controller
 {
+    /**
+     * @OA\Get(
+     * path="/api/courses",
+     * summary="Получение курсов",
+     * description="Получает все курсы содержащиеся в базе",
+     * operationId="getCourses",
+     * tags={"courses"},
+     * @OA\Response(
+     *    response=200,
+     *    description="Success",
+     *    @OA\JsonContent(ref="#/components/schemas/CourseModel"),
+     *  )
+     * )
+     * )
+     */
     public function getCourses(CoursesQueryBuilder $coursesQueryBuilder)
     {
 
@@ -18,6 +41,37 @@ class CourseController extends Controller
         return response()->json($courses);
     }
 
+    /**
+     * @OA\Get(
+     * path="/api/courses/{id}",
+     * summary="Получение курса",
+     * description="Получает курсы по ID курса",
+     * operationId="getCourseById",
+     * tags={"courses"},
+     * @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID по которому выберается курс",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     * @OA\Response(
+     *    response=200,
+     *    description="Success",
+     *    @OA\JsonContent(ref="#/components/schemas/CourseModel")
+     *  ),
+     * @OA\Response(
+     *         response=404,
+     *         description="Такого курса не существует",
+     *         @OA\JsonContent(
+     *          @OA\Property(property="message", type="string", example="Course not found"),
+     *
+     *         )
+     *  ),
+     * )
+     */
     public function getCourseById(CoursesQueryBuilder $coursesQueryBuilder, int $id)
     {
 
@@ -29,6 +83,36 @@ class CourseController extends Controller
         return response()->json($course);
     }
 
+   /**
+    *   @OA\Post(
+    *       path="/api/courses",
+    *       summary="Создание курса",
+    *       description="Создает курс с заданными параметрами",
+    *       operationId="createCourse",
+    *       tags={"courses"},
+    *       security={ {"bearer_token": {} }},
+    *       @OA\Response(
+    *           response=200,
+    *           description="Success",
+    *           @OA\JsonContent(ref="#/components/schemas/CourseModel")
+    *       ),
+    *       @OA\Response(
+    *           response=422,
+    *           description="Переданы не все обязательные поля",
+    *           @OA\JsonContent(
+    *               @OA\Property(property="message", type="string", example="Поле id обязательно для заполнения")
+    *           ),
+    *       ),
+    *       @OA\Response(
+    *           response=401,
+    *           description="Пользователь не авторизован",
+    *           @OA\JsonContent(
+    *               @OA\Property(property="message", type="string", example="Курс может составлять только авторизованный пользователь"),
+    *           ),
+    *       ),
+    *       @OA\RequestBody(ref="#/components/requestBodies/CourseArray")
+    *   )
+    */
     public function createCourse(CreateRequest $request)
     {
         $user = auth()->user();
@@ -50,13 +134,66 @@ class CourseController extends Controller
                     [![](https://avatars.githubusercontent.com/u/1680273?s=80&v=4)]
                     (https://avatars.githubusercontent.com/u/1680273?v=4)",
                 ]);
-                return response(['id' => $course['id'], 'message' => 'Success'], 200);
+                return response([$course], 200);
             }
-            return response(['message' => 'Заполнены не все обязательные поля'], 400);
+            return response(['message' => 'Заполнены не все обязательные поля'], 422);
         }
         return response(['message' => 'Курс может составлять только авторизованный пользователь'], 401);
     }
 
+    /**
+     *   @OA\Patch(
+     *       path="/api/courses/{id}",
+     *       summary="Изменение курса",
+     *       description="Изменяет курс с заданными параметрами",
+     *       operationId="updateCourse",
+     *       tags={"courses"},
+     *       security={ {"bearer_token": {} }},
+     *       @OA\Parameter(
+     *           name="id",
+     *           in="path",
+     *           description="ID по которому выберается курс",
+     *           required=true,
+     *           @OA\Schema(
+     *               type="integer"
+     *           )
+     *       ),
+     *       @OA\Response(
+     *           response=200,
+     *           description="Success",
+     *           @OA\JsonContent(ref="#/components/schemas/CourseModel")
+     *       ),
+     *       @OA\Response(
+     *           response=422,
+     *           description="Переданы не все обязательные поля",
+     *           @OA\JsonContent(
+     *               @OA\Property(property="message", type="string", example="Поле id обязательно для заполнения")
+     *           ),
+     *       ),
+     *       @OA\Response(
+     *           response=401,
+     *           description="Пользователь не авторизован",
+     *           @OA\JsonContent(
+     *               @OA\Property(property="message", type="string", example="Курс может менять только авторизованный пользователь"),
+     *           ),
+     *       ),
+     *       @OA\Response(
+     *           response=404,
+     *           description="Курса не существует",
+     *           @OA\JsonContent(
+     *               @OA\Property(property="message", type="string", example="Такого курса не существует"),
+     *           ),
+     *       ),
+     *       @OA\Response(
+     *           response=403,
+     *           description="Пользователь не автор курса",
+     *           @OA\JsonContent(
+     *               @OA\Property(property="message", type="string", example="Описание курса может менять только автор курса"),
+     *           ),
+     *       ),
+     *       @OA\RequestBody(ref="#/components/requestBodies/CourseArray")
+     *   )
+     */
     public function updateCourse(CreateRequest $request, CoursesQueryBuilder $coursesQueryBuilder, int $id)
     {
         $user = auth()->user();
@@ -72,9 +209,9 @@ class CourseController extends Controller
                         ...$valid,
                         'author' => $user->getKey(),
                     ])) {
-                        return response(['id' => $course['id'], 'message' => 'Success'], 200);
+                        return response([$course], 200);
                     }
-                    return response(['message' => 'Заполнены не все обязательные поля'], 400);
+                    return response(['message' => 'Заполнены не все обязательные поля'], 422);
                 }
                 return response(['message' => 'Описание курса может менять только автор курса'], 403);
             }
@@ -84,6 +221,53 @@ class CourseController extends Controller
         return response(['message' => 'Курс может менять только авторизованный пользователь'], 401);
     }
 
+    /**
+     *   @OA\Delete(
+     *       path="/api/courses/{id}",
+     *       summary="Изменение курса",
+     *       description="Изменяет курс с заданными параметрами",
+     *       operationId="deleteCourse",
+     *       tags={"courses"},
+     *       security={ {"bearer_token": {} }},
+     *       @OA\Parameter(
+     *           name="id",
+     *           in="path",
+     *           description="ID по которому удаляется курс",
+     *           required=true,
+     *           @OA\Schema(
+     *               type="integer"
+     *           )
+     *       ),
+     *       @OA\Response(
+     *           response=200,
+     *           description="Success",
+     *           @OA\JsonContent(
+     *               @OA\Property(property="message", type="string", example="Success"),
+     *           ),
+     *       ),
+     *       @OA\Response(
+     *           response=401,
+     *           description="Пользователь не авторизован",
+     *           @OA\JsonContent(
+     *               @OA\Property(property="message", type="string", example="Курс может удалить только авторизованный пользователь"),
+     *           ),
+     *       ),
+     *       @OA\Response(
+     *           response=404,
+     *           description="Курса не существует",
+     *           @OA\JsonContent(
+     *               @OA\Property(property="message", type="string", example="Такого курса не существует"),
+     *           ),
+     *       ),
+     *       @OA\Response(
+     *           response=403,
+     *           description="Пользователь не автор курса",
+     *           @OA\JsonContent(
+     *               @OA\Property(property="message", type="string", example="Курс может удалить только его создатель"),
+     *           ),
+     *       ),
+     *   )
+     */
     public function deleteCourse(CoursesQueryBuilder $coursesQueryBuilder, int $id)
     {
         $user = auth()->user();

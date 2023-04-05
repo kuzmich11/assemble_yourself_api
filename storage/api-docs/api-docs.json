@@ -1,0 +1,1150 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Assemble Yourself",
+        "description": "Приложение для личностного роста",
+        "contact": {
+            "email": "v.a.kuznetsov-83@yandex.ru"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Регистрация",
+                "description": "Регистрация пользователя по email и паролю",
+                "operationId": "register",
+                "requestBody": {
+                    "description": "Pass user credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "name"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user1@mail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "minLength": 8,
+                                        "example": "PassWord12345"
+                                    },
+                                    "about": {
+                                        "type": "string",
+                                        "example": "Обо мне"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "422": {
+                        "description": "Wrong credentials response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sorry, wrong email address or password. Please try again"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Авторизация",
+                "description": "Авторизация пользователя по email и паролю",
+                "operationId": "login",
+                "requestBody": {
+                    "description": "Pass user credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user1@mail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "minLength": 8,
+                                        "example": "PassWord12345"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "422": {
+                        "description": "Wrong credentials response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sorry, wrong email address or password. Please try again"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Success",
+                        "headers": {
+                            "Set-Cookie": {
+                                "schema": {
+                                    "type": "access_token, refresh_token"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Выход из системы",
+                "description": "Выход из системы",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successfully logged out"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Пользователь не авторизован",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/refresh": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Обновление токена",
+                "description": "Обновление токена при истечении access_token",
+                "operationId": "refresh",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "headers": {
+                            "Set-Cookie": {
+                                "schema": {
+                                    "type": "access_token, refresh_token"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Токен в стоп-листе или неверный формат токена или токен отсутствует",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The token has been blacklisted"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/courses/{id}/content": {
+            "get": {
+                "tags": [
+                    "content"
+                ],
+                "summary": "Получение контента курса",
+                "description": "Получает курсы по ID курса",
+                "operationId": "getContentByCourseId",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID курса по которому выберается контент",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentModel"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Отсутсвует содержимое курса",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Отсутсвует содержимое курса"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "content"
+                ],
+                "summary": "Изменение содержания курса",
+                "description": "Изменяет или создает контент курса с заданными параметрами",
+                "operationId": "createContent",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID по которому выберается курс",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "request": "ContentArray",
+                    "description": "Перечень свойств контента",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "content": {
+                                        "description": "Содержание курса",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentModel"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Переданы не все обязательные поля",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Поле cousre_id обязательно для заполнения"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Пользователь не авторизован",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Содержание курса может создавать только авторизованый пользователь"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Пользователь не автор курса",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Содержание курса может создавать только автор курса"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Курса не существует",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Такого курса не существует"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/courses": {
+            "get": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Получение курсов",
+                "description": "Получает все курсы содержащиеся в базе",
+                "operationId": "getCourses",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CourseModel"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Создание курса",
+                "description": "Создает курс с заданными параметрами",
+                "operationId": "createCourse",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/CourseArray"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CourseModel"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Переданы не все обязательные поля",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Поле id обязательно для заполнения"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Пользователь не авторизован",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Курс может составлять только авторизованный пользователь"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/courses/{id}": {
+            "get": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Получение курса",
+                "description": "Получает курсы по ID курса",
+                "operationId": "getCourseById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID по которому выберается курс",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CourseModel"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Такого курса не существует",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Course not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Изменение курса",
+                "description": "Изменяет курс с заданными параметрами",
+                "operationId": "deleteCourse",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID по которому удаляется курс",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Пользователь не авторизован",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Курс может удалить только авторизованный пользователь"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Курса не существует",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Такого курса не существует"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Пользователь не автор курса",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Курс может удалить только его создатель"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Изменение курса",
+                "description": "Изменяет курс с заданными параметрами",
+                "operationId": "updateCourse",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID по которому выберается курс",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/CourseArray"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CourseModel"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Переданы не все обязательные поля",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Поле id обязательно для заполнения"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Пользователь не авторизован",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Курс может менять только авторизованный пользователь"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Курса не существует",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Такого курса не существует"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Пользователь не автор курса",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Описание курса может менять только автор курса"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/profile": {
+            "get": {
+                "tags": [
+                    "profile"
+                ],
+                "summary": "Информация о пользователе",
+                "description": "Получение информации о пользователе по токену",
+                "operationId": "getProfileByToken",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "readOnly": "true",
+                                            "example": "1"
+                                        },
+                                        "name": {
+                                            "description": "Имя пользователя",
+                                            "type": "string",
+                                            "readOnly": "true"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "format": "email",
+                                            "readOnly": "true",
+                                            "example": "user1@mail.com"
+                                        },
+                                        "password": {
+                                            "type": "string",
+                                            "format": "password",
+                                            "minLength": 8,
+                                            "readOnly": "true",
+                                            "example": "PassWord12345"
+                                        },
+                                        "about": {
+                                            "type": "string",
+                                            "readOnly": "true",
+                                            "example": "Обо мне"
+                                        },
+                                        "Courses": {
+                                            "$ref": "#/components/schemas/CourseModel"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Пользователь не авторизован",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "profile"
+                ],
+                "summary": "Изменение профиля пользователя",
+                "description": "Изменение профиля пользователя. Пользователь должен быть авторизован",
+                "operationId": "updateProfile",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UserArray"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Пользователь не авторизован",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Авторизуйтесь для изменения профиля"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Переданы не все обязательные поля пользователь с таким email уже существует",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Поле id обязательно для заполнения"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ContentModel": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "course_id": {
+                        "description": "ID курса",
+                        "type": "integer",
+                        "readOnly": "true"
+                    },
+                    "content": {
+                        "description": "Содержание курса",
+                        "type": "string",
+                        "readOnly": "true"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Content"
+                }
+            },
+            "CourseModel": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "course_name": {
+                        "description": "Название курса",
+                        "type": "string",
+                        "readOnly": "true"
+                    },
+                    "description": {
+                        "description": "Описание курса",
+                        "type": "string",
+                        "readOnly": "true"
+                    },
+                    "tag": {
+                        "type": "string",
+                        "readOnly": "true"
+                    },
+                    "cover_url": {
+                        "description": "URL адрес обложки",
+                        "type": "string"
+                    },
+                    "author": {
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "start_date": {
+                        "description": "Дата начала курса",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "end_date": {
+                        "description": "Дата окончания курса",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "course_program": {
+                        "description": "Содержание программы курса",
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        }
+                    },
+                    "created_at": {
+                        "description": "Initial creation timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "updated_at": {
+                        "description": "Last update timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "deleted_at": {
+                        "description": "Soft delete timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Courses"
+                }
+            },
+            "User": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "name": {
+                        "description": "Имя пользователя",
+                        "type": "string",
+                        "readOnly": "true"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "readOnly": "true",
+                        "example": "user1@mail.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "minLength": 8,
+                        "readOnly": "true",
+                        "example": "PassWord12345"
+                    },
+                    "about": {
+                        "type": "string",
+                        "readOnly": "true",
+                        "example": "Обо мне"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Courses"
+                }
+            }
+        },
+        "requestBodies": {
+            "CourseArray": {
+                "description": "Перечень свойств курса",
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "course_name": {
+                                    "description": "Название курса",
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "description": "Описание курса",
+                                    "type": "string"
+                                },
+                                "tag": {
+                                    "type": "string"
+                                },
+                                "cover_url": {
+                                    "description": "URL адрес обложки",
+                                    "type": "string"
+                                },
+                                "start_date": {
+                                    "description": "Дата начала курса",
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "end_at": {
+                                    "description": "Дата окончания курса",
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "course_program": {
+                                    "description": "Содержание программы курса",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "UserArray": {
+                "description": "Перечень свойств пользователя",
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "example": "1"
+                                },
+                                "name": {
+                                    "description": "Имя пользователя",
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "format": "email",
+                                    "example": "user1@mail.com"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "minLength": 8,
+                                    "example": "PassWord12345"
+                                },
+                                "about": {
+                                    "type": "string",
+                                    "example": "Обо мне"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearer_token": {
+                "type": "apiKey",
+                "scheme": "bearer",
+                "description": "Enter token in format (Bearer {Token})",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "auth",
+            "description": "Контроллер обеспечивает авторизацию и аутентификацию пользователя"
+        },
+        {
+            "name": "content",
+            "description": "Контроллер обеспечивает все операции с курсами"
+        },
+        {
+            "name": "courses",
+            "description": "Контроллер обеспечивает все операции с курсами"
+        },
+        {
+            "name": "profile",
+            "description": "Контроллер обеспечивает получение информации о пользователе и изменение профиля пользователя"
+        }
+    ]
+}

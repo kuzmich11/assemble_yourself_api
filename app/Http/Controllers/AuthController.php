@@ -4,15 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Users\CreateRequest;
 use App\Models\User;
-
-use App\QueryBuilders\CoursesQueryBuilder;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 
+/**
+ * @OA\Tag(
+ *     name="auth",
+ *     description="Контроллер обеспечивает авторизацию и аутентификацию пользователя"
+ * )
+ */
 class AuthController extends Controller
 {
     /**
@@ -24,35 +29,53 @@ class AuthController extends Controller
     {
         $this->middleware('auth:api', ['except' => ['login', 'refresh', 'register']]);
     }
-
-    public function register (CreateRequest $request)
+    /**
+     * @OA\Post(
+     * path="/api/register",
+     * summary="Регистрация",
+     * description="Регистрация пользователя по email и паролю",
+     * operationId="register",
+     * tags={"auth"},
+     * @OA\RequestBody(
+     * required=true,
+     * description="Pass user credentials",
+     * @OA\JsonContent(
+     * required={"name", "email", "password"},
+     * @OA\Property(property="name", type="string", example="name"),
+     * @OA\Property(property="email", type="string", format="email", example="user1@mail.com"),
+     * @OA\Property(property="password", type="string", format="password", minLength=8, example="PassWord12345"),
+     * @OA\Property(property="about", type="string", example="Обо мне"),
+     * ),
+     * ),
+     * @OA\Response(
+     * response=422,
+     * description="Wrong credentials response",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Sorry, wrong email address or password. Please try again")
+     * )
+     * ),
+     * * @OA\Response(
+     * response=200,
+     * description="Success",
+     * @OA\JsonContent(
+     * @OA\Property(property="user", type="object", ref="#/components/schemas/User"),
+     * )
+     * ),
+     * )
+     */
+    public function register(CreateRequest $request)
     {
-
-//        $name = $request->get('name');
-//        $email = $request->get('email');
-//        $password =  $request->get('password');
-//
-//        if (!isset($name) or !isset($email) or !isset($password)) {
-//            return response(['error' => true, 'message' => 'Не удалось зарегистрировать пользователя'], 400);
-//        }
-//        if (User::where('email', '=', $email)->first() === null) {
         if ($valid = $request->validated()) {
             $user = User::create([
-//                'name' => $name,
-//                'email' => $email,
                 ...$valid,
                 'password' => Hash::make($request['password']),
-
             ]);
-            if ($user->save()) {
-                return $this->login();
-            }
+            return response($user, 200);
+//            if ($user->save()) {
+//                return $this->login();
+//            }
         }
-
-            return response(['error' => true, 'message' => 'Не удалось зарегистрировать пользователя'], 400);
-//        }
-
-//        return response(['error' => true, 'message' => 'Пользователь с данным email уже существует'], 400);
+        return response(['error' => true, 'message' => 'Не удалось зарегистрировать пользователя'], 400);
     }
 
     /**
@@ -60,37 +83,93 @@ class AuthController extends Controller
      *
      * @return Application|\Illuminate\Foundation\Application|Response|ResponseFactory|JsonResponse
      */
+    /**
+     * @OA\Post(
+     * path="/api/login",
+     * summary="Авторизация",
+     * description="Авторизация пользователя по email и паролю",
+     * operationId="login",
+     * tags={"auth"},
+     * @OA\RequestBody(
+     * required=true,
+     * description="Pass user credentials",
+     * @OA\JsonContent(
+     * required={"email", "password"},
+     * @OA\Property(property="email", type="string", format="email", example="user1@mail.com"),
+     * @OA\Property(property="password", type="string", format="password", minLength=8, example="PassWord12345"),
+     * ),
+     * ),
+     * @OA\Response(
+     * response=422,
+     * description="Wrong credentials response",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Sorry, wrong email address or password. Please try again")
+     * )
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Success",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Success"),
+     * ),
+     *     @OA\Parameter(
+     *         name="apiKey",
+     *         in="cookie",
+     *         description="access token",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     * @OA\Header(
+     * header="Set-Cookie",
+     *     @OA\Schema(type="access_token, refresh_token")
+     * ),
+     * ),
+     * )
+     */
     public function login()
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
         return $this->respondWithToken($token);
     }
 
     /**
-     * Get the authenticated User.
-     *
-     * @return JsonResponse
-     */
-//    public function me(CoursesQueryBuilder $coursesQueryBuilder)
-//    {
-//        $user = auth()->user();
-//        $courses = $coursesQueryBuilder->getCoursesByAuthor($user->getKey());
-//        return response()->json([$user, $courses]);
-//    }
-
-    /**
      * Log the user out (Invalidate the token).
      *
      * @return JsonResponse
      */
+    /**
+     * @OA\Post(
+     *  path="/api/logout",
+     *  summary="Выход из системы",
+     *  description="Выход из системы",
+     *  operationId="logout",
+     *  tags={"auth"},
+     *  security={ {"bearer_token": {} }},
+     *  @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\JsonContent(
+     *          @OA\Property(property="message", type="string", example="Successfully logged out"),
+     *      ),
+     *  ),
+     *  @OA\Response(
+     *     response=401,
+     *     description="Пользователь не авторизован",
+     *     @OA\JsonContent(
+     *          @OA\Property(property="message", type="string", example="Unauthenticated."),
+     *      ),
+     *  ),
+     * )
+     */
     public function logout()
     {
         auth()->logout();
-
         return response()->json(['message' => 'Successfully logged out']);
     }
 
@@ -99,9 +178,50 @@ class AuthController extends Controller
      *
      * @return Application|\Illuminate\Foundation\Application|Response|ResponseFactory
      */
+    /**
+     * @OA\Post(
+     *  path="/api/refresh",
+     *  summary="Обновление токена",
+     *  description="Обновление токена при истечении access_token",
+     *  operationId="refresh",
+     *  tags={"auth"},
+     *  security={ {"bearer_token": {} }},
+     *  @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\JsonContent(
+     *          @OA\Property(property="message", type="string", example="Success"),
+     *      ),
+     *     @OA\Parameter(
+     *         name="apiKey",
+     *         in="cookie",
+     *         description="access token",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *      ),
+     *      @OA\Header(
+     *          header="Set-Cookie",
+     *          @OA\Schema(type="access_token, refresh_token")
+     *      ),
+     *  ),
+     *  @OA\Response(
+     *     response=500,
+     *     description="Токен в стоп-листе или неверный формат токена или токен отсутствует",
+     *     @OA\JsonContent(
+     *          @OA\Property(property="message", type="string", example="The token has been blacklisted"),
+     *      ),
+     *  ),
+     * )
+     */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        try {
+            return $this->respondWithToken(auth()->refresh());
+        } catch (TokenBlacklistedException|JWTException $e) {
+            return response(['message' => $e->getMessage()],500);
+        }
     }
 
     /**
