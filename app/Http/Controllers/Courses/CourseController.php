@@ -18,27 +18,97 @@ use OpenApi\Annotations\OpenApi as OA;
  */
 class CourseController extends Controller
 {
-    /**
-     * @OA\Get(
-     * path="/api/courses",
-     * summary="Получение курсов",
-     * description="Получает все курсы содержащиеся в базе",
-     * operationId="getCourses",
-     * tags={"courses"},
-     * @OA\Response(
-     *    response=200,
-     *    description="Success",
-     *    @OA\JsonContent(ref="#/components/schemas/CourseModel"),
-     *  )
-     * )
-     * )
-     */
+//    /**
+//     * @OA\Get(
+//     * path="/api/courses",
+//     * summary="Получение курсов",
+//     * description="Получает все курсы содержащиеся в базе",
+//     * operationId="getCourses",
+//     * tags={"courses"},
+//     * @OA\Response(
+//     *    response=200,
+//     *    description="Success",
+//     *    @OA\JsonContent(ref="#/components/schemas/CourseModel"),
+//     *  )
+//     * )
+//     * )
+//     */
     public function getCourses(CoursesQueryBuilder $coursesQueryBuilder)
     {
 
         $courses = $coursesQueryBuilder->getAll();
 
         return response()->json($courses);
+    }
+
+    /**
+     * @OA\Get (
+     *  path="/api/courses",
+     *  summary="Получение курсов",
+     *  description="Получает курсы c заданной фильтрацией по тэгам и заданной пагинацией",
+     *  operationId="getCoursesWithPaginate",
+     *  tags={"courses"},
+     *  @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\JsonContent(
+     *          @OA\Property(
+     *              property="tags",
+     *              type="array",
+     *              description="10 уникальных тэгов",
+     *              @OA\Items (
+     *                  type="string",
+     *                  example="php",
+     *              ),
+     *          ),
+     *          @OA\Property(
+     *              property="num_page_paginate",
+     *              type="integer",
+     *              description="Количество страниц пагинации",
+     *              example="1",
+     *          ),
+     *          @OA\Property (
+     *              property="courses",
+     *              type="array",
+     *              description="Курсы с заданными параметрами",
+     *              @OA\Items(
+     *                  type="object",
+     *                  ref="#/components/schemas/CourseModel",
+     *              ),
+     *          ),
+     *      ),
+     *  ),
+     *  @OA\RequestBody (
+     *      @OA\JsonContent(
+     *          type="object",
+     *          @OA\Property (property="limit", type="integer", description="Количество выводимых на странице курсов", example="10"),
+     *          @OA\Property (property="page", type="integer", description="Номер выводимой страницы пагинации", example="1"),
+     *          @OA\Property (
+     *              property="tags",
+     *              type="array",
+     *              description="Количество выводимых на странице курсов",
+     *              @OA\Items (
+     *                  type="string",
+     *                  example="php",
+     *              ),
+     *          ),
+     *      ),
+     *  ),
+     * )
+     */
+    public function getCoursesWithPaginate(CoursesQueryBuilder $coursesQueryBuilder, Request $request)
+    {
+        $limit = isset($request->limit) ? $request->limit : 10;
+        $page = isset($request->page) ? $request->page : 1;
+        $tags = isset($request->tags) ? $request->tags : null;
+
+        $courses = $coursesQueryBuilder->getCoursesWithPagination($tags, $limit, $page);
+        $allTags = CourseModel::pluck('tag')->take(10);
+        $response['tags'] = $allTags;
+        $response['num_page_paginate'] = $courses->lastPage();
+        $response['courses'] = $courses->items();
+
+        return response()->json($response);
     }
 
     /**

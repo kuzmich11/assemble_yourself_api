@@ -446,15 +446,66 @@
                     "courses"
                 ],
                 "summary": "Получение курсов",
-                "description": "Получает все курсы содержащиеся в базе",
-                "operationId": "getCourses",
+                "description": "Получает курсы c заданной фильтрацией по тэгам и заданной пагинацией",
+                "operationId": "getCoursesWithPaginate",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "limit": {
+                                        "description": "Количество выводимых на странице курсов",
+                                        "type": "integer",
+                                        "example": "10"
+                                    },
+                                    "page": {
+                                        "description": "Номер выводимой страницы пагинации",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "tags": {
+                                        "description": "Количество выводимых на странице курсов",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "php"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Success",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CourseModel"
+                                    "properties": {
+                                        "tags": {
+                                            "description": "10 уникальных тэгов",
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "php"
+                                            }
+                                        },
+                                        "num_page_paginate": {
+                                            "description": "Количество страниц пагинации",
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "courses": {
+                                            "description": "Курсы с заданными параметрами",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/CourseModel"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -807,7 +858,7 @@
                                             "readOnly": "true",
                                             "example": "Обо мне"
                                         },
-                                        "Courses": {
+                                        "courses": {
                                             "$ref": "#/components/schemas/CourseModel"
                                         }
                                     },

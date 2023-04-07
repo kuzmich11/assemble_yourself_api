@@ -40,7 +40,7 @@ Route::group(['middleware' => 'api'], function () {
     });
 });
 
-Route::get('courses', [CourseController::class, 'getCourses']);
+Route::get('courses', [CourseController::class, 'getCoursesWithPaginate']);
 Route::get('courses/{id}', [CourseController::class, 'getCourseById']);
 
 Route::get('courses/{id}/content', [ContentController::class, 'getContentByCourseId']);
