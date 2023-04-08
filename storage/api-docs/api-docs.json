@@ -341,9 +341,7 @@
                         }
                     }
                 }
-            }
-        },
-        "/api/courses/{id}/content": {
+            },
             "patch": {
                 "tags": [
                     "content"
@@ -358,7 +356,18 @@
                         "description": "ID по которому выберается курс",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "path",
+                        "description": "Номер страницы контента курса",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
                         }
                     }
                 ],
@@ -370,8 +379,12 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
+                                    "page_title": {
+                                        "description": "Заголовок страницы курса",
+                                        "type": "string"
+                                    },
                                     "content": {
-                                        "description": "Содержание курса",
+                                        "description": "Содержание страницы курса",
                                         "type": "string"
                                     }
                                 },

@@ -82,21 +82,32 @@ class ContentController extends Controller
 
     /**
      * @OA\Patch(
-     *       path="/api/courses/{id}/content",
-     *       summary="Изменение содержания курса",
-     *       description="Изменяет или создает контент курса с заданными параметрами",
-     *       operationId="createContent",
-     *       tags={"content"},
-     *       security={ {"bearer_token": {} }},
-     *       @OA\Parameter(
-     *           name="id",
-     *           in="path",
-     *           description="ID по которому выберается курс",
-     *           required=true,
-     *           @OA\Schema(
-     *               type="integer"
-     *           )
-     *       ),
+     *      path="/api/courses/{id}/content/{page}",
+     *      summary="Изменение содержания курса",
+     *      description="Изменяет или создает контент курса с заданными параметрами",
+     *      operationId="createContent",
+     *      tags={"content"},
+     *      security={ {"bearer_token": {} }},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="ID по которому выберается курс",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *              example="1",
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="path",
+     *          description="Номер страницы контента курса",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *              example="1",
+     *          )
+     *      ),
      *       @OA\Response(
      *           response=200,
      *           description="Success",
@@ -135,12 +146,13 @@ class ContentController extends Controller
      *          description="Перечень свойств контента",
      *          required=true,
      *          @OA\JsonContent(
-     *              @OA\Property(property="content", type="string", description="Содержание курса"),
+     *              @OA\Property(property="page_title", type="string", description="Заголовок страницы курса"),
+     *              @OA\Property(property="content", type="string", description="Содержание страницы курса"),
      *          )
      *       )
      *   )
      */
-    public function createContent(Request $request, int $id)
+    public function createContent(Request $request, int $id, int $page)
     {
         $user = auth()->user();
 
@@ -150,11 +162,11 @@ class ContentController extends Controller
                 $author = $course['author'];
 
                 if ($author === $user->getKey()) {
-                    ContentModel::updateOrInsert(
-                        ['course_id' => $course['id']],
-                        ['content' => $request->get('content')]
+                    ContentModel::updateOrCreate(
+                        ['course_id' => $course['id'], 'page' => $page],
+                        ['page_title'=> $request->get('page_title'),'content' => $request->get('content')]
                     );
-                    $content = ContentModel::where('id', '=', $id)->first();
+                    $content = ContentModel::where([['course_id', '=', $id], ['page', '=', $page]])->first();
                     return response()->json($content);
                 }
                 return response(['message' => 'Содержание курса может создавать только автор курса'], 403);
