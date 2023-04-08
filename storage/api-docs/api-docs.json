@@ -273,7 +273,7 @@
                 ]
             }
         },
-        "/api/courses/{id}/content": {
+        "/api/courses/{id}/content/{page}": {
             "get": {
                 "tags": [
                     "content"
@@ -288,7 +288,18 @@
                         "description": "ID курса по которому выберается контент",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "path",
+                        "description": "Номер страницы курса",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
                         }
                     }
                 ],
@@ -298,7 +309,17 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ContentModel"
+                                    "properties": {
+                                        "total_page_in_course": {
+                                            "description": "Количество страниц контента курса",
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "page": {
+                                            "$ref": "#/components/schemas/ContentModel"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -320,7 +341,9 @@
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/courses/{id}/content": {
             "patch": {
                 "tags": [
                     "content"
@@ -964,11 +987,41 @@
                     "course_id": {
                         "description": "ID курса",
                         "type": "integer",
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "page": {
+                        "description": "Номер страницы курса",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "page_title": {
+                        "description": "Заголовок страницы",
+                        "type": "string",
                         "readOnly": "true"
                     },
                     "content": {
                         "description": "Содержание курса",
                         "type": "string",
+                        "readOnly": "true"
+                    },
+                    "created_at": {
+                        "description": "Initial creation timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "updated_at": {
+                        "description": "Last update timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "deleted_at": {
+                        "description": "Soft delete timestamp",
+                        "type": "string",
+                        "format": "date-time",
                         "readOnly": "true"
                     }
                 },

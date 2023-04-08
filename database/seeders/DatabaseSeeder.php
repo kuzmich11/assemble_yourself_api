@@ -37,10 +37,15 @@ class DatabaseSeeder extends Seeder
                     })
                     ->has(
                         ContentModel::factory()
-                            ->count(1)
+                            ->count(3)
                             ->state(function (array $attributes, CourseModel $course) {
                                 return ['course_id' => $course->id];
                             })
+                            ->sequence(
+                                ['page' => 1],
+                                ['page' => 2],
+                                ['page' => 3],
+                            )
                     )
             )
             ->create();

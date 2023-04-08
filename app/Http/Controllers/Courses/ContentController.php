@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Courses;
 use App\Http\Controllers\Controller;
 use App\Models\ContentModel;
 use App\Models\CourseModel;
+use App\QueryBuilders\ContentQueryBuilder;
 use Illuminate\Http\Request;
 
 /**
@@ -17,7 +18,7 @@ class ContentController extends Controller
 {
     /**
      * @OA\Get(
-     *      path="/api/courses/{id}/content",
+     *      path="/api/courses/{id}/content/{page}",
      *      summary="Получение контента курса",
      *      description="Получает курсы по ID курса",
      *      operationId="getContentByCourseId",
@@ -28,14 +29,34 @@ class ContentController extends Controller
      *          description="ID курса по которому выберается контент",
      *          required=true,
      *          @OA\Schema(
-     *              type="integer"
-     *          )
+     *              type="integer",
+     *              example="1",
+     *          ),
+     *      ),
+     *      @OA\Parameter (
+     *          name="page",
+     *          in="path",
+     *          description="Номер страницы курса",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *              example="1",
+     *          ),
      *      ),
      *      @OA\Response(
      *          response=200,
      *          description="Success",
-     *          @OA\JsonContent(ref="#/components/schemas/ContentModel")
-     *      ),
+     *          @OA\JsonContent (
+     *              type="object",
+     *              @OA\Property (
+     *                  property="total_page_in_course",
+     *                  type="integer",
+     *                  description="Количество страниц контента курса",
+     *                  example="1",
+     *              ),
+     *              @OA\Property (property="page", ref="#/components/schemas/ContentModel")
+     *          ),
+     *     ),
      *      @OA\Response(
      *          response=404,
      *          description="Отсутсвует содержимое курса",
@@ -45,14 +66,18 @@ class ContentController extends Controller
      *      ),
      * )
      */
-    public function getContentByCourseId(int $id)
+    public function getContentByCourseId(ContentQueryBuilder $contentQueryBuilder, int $id, int $page)
     {
-        $content = ContentModel::where('course_id', '=', $id)->first();
+        $content = $contentQueryBuilder->getPageWithContentByCourseId($id, $page);
 
         if (!isset($content)) {
             return response(['message' => 'Отсутсвует содержимое курса'], 404);
         }
-        return response()->json($content);
+
+        $response['total_page_in_course'] = ContentModel::where('course_id', $id)->count();
+        $response['page'] = $content;
+
+        return response()->json($response);
     }
 
     /**

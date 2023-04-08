@@ -33,7 +33,7 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::delete('courses/{id}', [CourseController::class, 'deleteCourse']);
 
-    Route::patch('courses/{id}/content', [ContentController::class, 'createContent']);
+    Route::patch('courses/{id}/content/{page}', [ContentController::class, 'createContent']);
 
     Route::group(['middleware' => 'auth:api'], function () {
 
@@ -43,4 +43,4 @@ Route::group(['middleware' => 'api'], function () {
 Route::get('courses', [CourseController::class, 'getCoursesWithPaginate']);
 Route::get('courses/{id}', [CourseController::class, 'getCourseById']);
 
-Route::get('courses/{id}/content', [ContentController::class, 'getContentByCourseId']);
+Route::get('courses/{id}/content/{page}', [ContentController::class, 'getContentByCourseId']);

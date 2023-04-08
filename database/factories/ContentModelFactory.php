@@ -11,6 +11,8 @@ class ContentModelFactory extends Factory
     {
         return [
             'course_id' => CourseModel::factory(),
+            'page' => fake()->unique()->randomNumber(2),
+            'page_title' => fake()->jobTitle(),
             'content' => fake()->text(500),
         ];
     }
