@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -62,14 +64,22 @@ class CourseModel extends Model
         'course_program' => 'array',
     ];
 
+    protected function tag(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => strtolower($value),
+            set: fn (string $value) => strtolower($value),
+        );
+    }
+
     public function user():BelongsTo
     {
         return $this->belongsTo(User::class, 'author');
     }
 
-    public function contentModel (): HasOne
+    public function contentModel (): HasMany
     {
-        return $this->hasOne(ContentModel::class, 'course_id');
+        return $this->hasMany(ContentModel::class, 'course_id');
     }
 
 }

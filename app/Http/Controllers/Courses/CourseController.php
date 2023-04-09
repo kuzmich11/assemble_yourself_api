@@ -18,27 +18,108 @@ use OpenApi\Annotations\OpenApi as OA;
  */
 class CourseController extends Controller
 {
-    /**
-     * @OA\Get(
-     * path="/api/courses",
-     * summary="Получение курсов",
-     * description="Получает все курсы содержащиеся в базе",
-     * operationId="getCourses",
-     * tags={"courses"},
-     * @OA\Response(
-     *    response=200,
-     *    description="Success",
-     *    @OA\JsonContent(ref="#/components/schemas/CourseModel"),
-     *  )
-     * )
-     * )
-     */
+//    /**
+//     * @OA\Get(
+//     * path="/api/courses",
+//     * summary="Получение курсов",
+//     * description="Получает все курсы содержащиеся в базе",
+//     * operationId="getCourses",
+//     * tags={"courses"},
+//     * @OA\Response(
+//     *    response=200,
+//     *    description="Success",
+//     *    @OA\JsonContent(ref="#/components/schemas/CourseModel"),
+//     *  )
+//     * )
+//     * )
+//     */
     public function getCourses(CoursesQueryBuilder $coursesQueryBuilder)
     {
 
         $courses = $coursesQueryBuilder->getAll();
 
         return response()->json($courses);
+    }
+
+    /**
+     * @OA\Get (
+     *  path="/api/courses",
+     *  summary="Получение курсов",
+     *  description="Получает курсы c заданной фильтрацией по тэгам и заданной пагинацией",
+     *  operationId="getCoursesWithPaginate",
+     *  tags={"courses"},
+     *  @OA\Parameter(
+     *         name="limit",
+     *         in="query",
+     *         description="Кол-во курсов выводимое на странице",
+     *         @OA\Schema(
+     *              type="integer",
+     *              example="10",
+     *         ),
+     *  ),
+     *  @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Номер выводимой страницы пагинации",
+     *         @OA\Schema(
+     *              type="integer",
+     *              example="1",
+     *         ),
+     *  ),
+     *  @OA\Parameter(
+     *         name="tags",
+     *         in="query",
+     *         description="Тэги по которым происходит фильтрация курсов",
+     *         @OA\Schema(
+     *              type="string",
+     *              example="php,python",
+     *         ),
+     *  ),
+     *  @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\JsonContent(
+     *          @OA\Property(
+     *              property="tags",
+     *              type="array",
+     *              description="10 уникальных тэгов",
+     *              @OA\Items (
+     *                  type="string",
+     *                  example="php",
+     *              ),
+     *          ),
+     *          @OA\Property(
+     *              property="num_page_paginate",
+     *              type="integer",
+     *              description="Количество страниц пагинации",
+     *              example="1",
+     *          ),
+     *          @OA\Property (
+     *              property="courses",
+     *              type="array",
+     *              description="Курсы с заданными параметрами",
+     *              @OA\Items(
+     *                  type="object",
+     *                  ref="#/components/schemas/CourseModel",
+     *              ),
+     *          ),
+     *      ),
+     *  ),
+     * )
+     */
+    public function getCoursesWithPaginate(CoursesQueryBuilder $coursesQueryBuilder, Request $request)
+    {
+        $limit = isset($request->limit) ? $request->limit : 10;
+        $page = isset($request->page) ? $request->page : 1;
+        $tags = isset($request->tags) ? explode(',', strtolower($request->tags)) : null;
+
+        $courses = $coursesQueryBuilder->getCoursesWithPagination($tags, $limit, $page);
+        $allTags = CourseModel::pluck('tag')->take(10);
+        $response['tags'] = $allTags;
+        $response['num_page_paginate'] = $courses->lastPage();
+        $response['courses'] = $courses->items();
+
+        return response()->json($response);
     }
 
     /**
@@ -128,9 +209,9 @@ class CourseController extends Controller
             if (isset($course)) {
                 ContentModel::create([
                     'course_id' => $course['id'],
+                    'page' => 1,
+                    'page_title' => 'Hello world!!!',
                     'content' => "---
-                    Hello world!!!
-
                     [![](https://avatars.githubusercontent.com/u/1680273?s=80&v=4)]
                     (https://avatars.githubusercontent.com/u/1680273?v=4)",
                 ]);

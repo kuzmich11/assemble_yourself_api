@@ -273,7 +273,7 @@
                 ]
             }
         },
-        "/api/courses/{id}/content": {
+        "/api/courses/{id}/content/{page}": {
             "get": {
                 "tags": [
                     "content"
@@ -288,7 +288,18 @@
                         "description": "ID курса по которому выберается контент",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "path",
+                        "description": "Номер страницы курса",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
                         }
                     }
                 ],
@@ -298,7 +309,17 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ContentModel"
+                                    "properties": {
+                                        "total_page_in_course": {
+                                            "description": "Количество страниц контента курса",
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "page": {
+                                            "$ref": "#/components/schemas/ContentModel"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -335,7 +356,18 @@
                         "description": "ID по которому выберается курс",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "path",
+                        "description": "Номер страницы контента курса",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
                         }
                     }
                 ],
@@ -347,8 +379,12 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
+                                    "page_title": {
+                                        "description": "Заголовок страницы курса",
+                                        "type": "string"
+                                    },
                                     "content": {
-                                        "description": "Содержание курса",
+                                        "description": "Содержание страницы курса",
                                         "type": "string"
                                     }
                                 },
@@ -446,15 +482,66 @@
                     "courses"
                 ],
                 "summary": "Получение курсов",
-                "description": "Получает все курсы содержащиеся в базе",
-                "operationId": "getCourses",
+                "description": "Получает курсы c заданной фильтрацией по тэгам и заданной пагинацией",
+                "operationId": "getCoursesWithPaginate",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Кол-во курсов выводимое на странице",
+                        "schema": {
+                            "type": "integer",
+                            "example": "10"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Номер выводимой страницы пагинации",
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "tags",
+                        "in": "query",
+                        "description": "Тэги по которым происходит фильтрация курсов",
+                        "schema": {
+                            "type": "string",
+                            "example": "php,python"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Success",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CourseModel"
+                                    "properties": {
+                                        "tags": {
+                                            "description": "10 уникальных тэгов",
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "php"
+                                            }
+                                        },
+                                        "num_page_paginate": {
+                                            "description": "Количество страниц пагинации",
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "courses": {
+                                            "description": "Курсы с заданными параметрами",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/CourseModel"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -807,7 +894,7 @@
                                             "readOnly": "true",
                                             "example": "Обо мне"
                                         },
-                                        "Courses": {
+                                        "courses": {
                                             "$ref": "#/components/schemas/CourseModel"
                                         }
                                     },
@@ -913,11 +1000,41 @@
                     "course_id": {
                         "description": "ID курса",
                         "type": "integer",
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "page": {
+                        "description": "Номер страницы курса",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "page_title": {
+                        "description": "Заголовок страницы",
+                        "type": "string",
                         "readOnly": "true"
                     },
                     "content": {
                         "description": "Содержание курса",
                         "type": "string",
+                        "readOnly": "true"
+                    },
+                    "created_at": {
+                        "description": "Initial creation timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "updated_at": {
+                        "description": "Last update timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "deleted_at": {
+                        "description": "Soft delete timestamp",
+                        "type": "string",
+                        "format": "date-time",
                         "readOnly": "true"
                     }
                 },

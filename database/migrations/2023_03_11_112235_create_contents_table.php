@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('contents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_id')->constrained()->cascadeOnDelete();
+            $table->integer('page');
+            $table->unique(['course_id', 'page']);
+            $table->string('page_title');
             $table->text('content');
             $table->timestamps();
         });

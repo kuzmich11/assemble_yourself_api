@@ -29,9 +29,14 @@ class CoursesQueryBuilder extends QueryBuilder
         return $courses;
     }
 
-    public function getCoursesWithPagination(int $quantity = 10): LengthAwarePaginator
+    public function getCoursesWithPagination(array $tags = null, int $quantity = 10, int $page = 1): LengthAwarePaginator
     {
-        $courses = $this->model->paginate($quantity);
+
+        if (isset($tags)) {
+            $courses = $this->model->whereIn('tag', $tags)->paginate($quantity, page: $page);
+        } else {
+            $courses = $this->model->paginate($quantity, page: $page);
+        }
         foreach ($courses as $course) {
             $author = User::where('id', '=', $course['author'])->get()->first();
             $course['author'] = $author['name'];
@@ -68,6 +73,12 @@ class CoursesQueryBuilder extends QueryBuilder
             }
         }
         return $courses;
+    }
+
+    public function getTags ()
+    {
+
+        return $this->model->select('tag')->distinct()->limit(10);
     }
 
 }
