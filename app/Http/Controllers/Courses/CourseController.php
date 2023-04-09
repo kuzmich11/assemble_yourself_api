@@ -48,6 +48,33 @@ class CourseController extends Controller
      *  description="Получает курсы c заданной фильтрацией по тэгам и заданной пагинацией",
      *  operationId="getCoursesWithPaginate",
      *  tags={"courses"},
+     *  @OA\Parameter(
+     *         name="limit",
+     *         in="query",
+     *         description="Кол-во курсов выводимое на странице",
+     *         @OA\Schema(
+     *              type="integer",
+     *              example="10",
+     *         ),
+     *  ),
+     *  @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Номер выводимой страницы пагинации",
+     *         @OA\Schema(
+     *              type="integer",
+     *              example="1",
+     *         ),
+     *  ),
+     *  @OA\Parameter(
+     *         name="tags",
+     *         in="query",
+     *         description="Тэги по которым происходит фильтрация курсов",
+     *         @OA\Schema(
+     *              type="string",
+     *              example="php,python",
+     *         ),
+     *  ),
      *  @OA\Response(
      *      response=200,
      *      description="Success",
@@ -78,29 +105,13 @@ class CourseController extends Controller
      *          ),
      *      ),
      *  ),
-     *  @OA\RequestBody (
-     *      @OA\JsonContent(
-     *          type="object",
-     *          @OA\Property (property="limit", type="integer", description="Количество выводимых на странице курсов", example="10"),
-     *          @OA\Property (property="page", type="integer", description="Номер выводимой страницы пагинации", example="1"),
-     *          @OA\Property (
-     *              property="tags",
-     *              type="array",
-     *              description="Количество выводимых на странице курсов",
-     *              @OA\Items (
-     *                  type="string",
-     *                  example="php",
-     *              ),
-     *          ),
-     *      ),
-     *  ),
      * )
      */
     public function getCoursesWithPaginate(CoursesQueryBuilder $coursesQueryBuilder, Request $request)
     {
         $limit = isset($request->limit) ? $request->limit : 10;
         $page = isset($request->page) ? $request->page : 1;
-        $tags = isset($request->tags) ? $request->tags : null;
+        $tags = isset($request->tags) ? explode(',', strtolower($request->tags)) : null;
 
         $courses = $coursesQueryBuilder->getCoursesWithPagination($tags, $limit, $page);
         $allTags = CourseModel::pluck('tag')->take(10);

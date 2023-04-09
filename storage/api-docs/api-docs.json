@@ -484,35 +484,35 @@
                 "summary": "Получение курсов",
                 "description": "Получает курсы c заданной фильтрацией по тэгам и заданной пагинацией",
                 "operationId": "getCoursesWithPaginate",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "limit": {
-                                        "description": "Количество выводимых на странице курсов",
-                                        "type": "integer",
-                                        "example": "10"
-                                    },
-                                    "page": {
-                                        "description": "Номер выводимой страницы пагинации",
-                                        "type": "integer",
-                                        "example": "1"
-                                    },
-                                    "tags": {
-                                        "description": "Количество выводимых на странице курсов",
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string",
-                                            "example": "php"
-                                        }
-                                    }
-                                },
-                                "type": "object"
-                            }
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Кол-во курсов выводимое на странице",
+                        "schema": {
+                            "type": "integer",
+                            "example": "10"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Номер выводимой страницы пагинации",
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "tags",
+                        "in": "query",
+                        "description": "Тэги по которым происходит фильтрация курсов",
+                        "schema": {
+                            "type": "string",
+                            "example": "php,python"
                         }
                     }
-                },
+                ],
                 "responses": {
                     "200": {
                         "description": "Success",

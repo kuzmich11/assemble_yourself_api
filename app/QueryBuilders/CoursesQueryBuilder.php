@@ -31,8 +31,9 @@ class CoursesQueryBuilder extends QueryBuilder
 
     public function getCoursesWithPagination(array $tags = null, int $quantity = 10, int $page = 1): LengthAwarePaginator
     {
+
         if (isset($tags)) {
-            $courses = $this->model->whereIn('tag', array_map('strtolower', $tags))->paginate($quantity, page: $page);
+            $courses = $this->model->whereIn('tag', $tags)->paginate($quantity, page: $page);
         } else {
             $courses = $this->model->paginate($quantity, page: $page);
         }
