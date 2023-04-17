@@ -233,7 +233,7 @@ class AuthController extends Controller
      */
     protected function respondWithToken(string $token)
     {
-        $access_token = cookie('access_token', $token, auth()->factory()->getTTL() * 5, secure: true, httpOnly: false); //связанная настройка с config/jwt.php
+        $access_token = cookie('access_token', $token, auth()->factory()->getTTL() * 5, secure: true, httpOnly: false, domain: 'assemble-yourself-client.vercel.app'); //связанная настройка с config/jwt.php
         $refresh_token = cookie('refresh_token', $token, secure: true, httpOnly: false);
 //            json([
 //            'access_token' => $token,
