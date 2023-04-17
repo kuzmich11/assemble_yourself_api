@@ -240,6 +240,6 @@ class AuthController extends Controller
 //            'token_type' => 'bearer',
 //            'expires_in' => auth()->factory()->getTTL() * 60
 //        ]));
-        return response(['message' => 'Success'])->withCookie($access_token)->withCookie($refresh_token);
+        return response(['message' => 'Success', 'access_token' => $token, 'refresh_token' => $token])->withCookie($access_token)->withCookie($refresh_token);
     }
 }

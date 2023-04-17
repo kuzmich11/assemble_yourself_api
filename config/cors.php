@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://assemble-yourself-client.vercel.app'],
+    'allowed_origins' => ['https://assemble-yourself-client.vercel.app', 'http://localhost:3000'],
 
     'allowed_origins_patterns' => [],
 
